@@ -1,0 +1,11 @@
+[project]
+name = "scope"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "fastapi[standard]>=0.134.0",
+    "sae-lens>=6.37.6",
+    "transformer-lens>=2.17.0",
+]
