@@ -1,6 +1,6 @@
 import torch
 from vllm_hook_plugins import HookedMamay
-from schemas.activations import ActivationPoint
+from src.schemas.activations import ActivationPoint
 
 from typing import List
 
@@ -20,9 +20,9 @@ class HookedMamayService:
             tensor_parallel_size=1
         )
 
-    def generate_activations_probing(self, texts: list[str]) -> List[tuple[str, list[ActivationPoint]]]:
+    def generate_activations(self, texts: list[str]) -> List[tuple[str, list[ActivationPoint]]]:
         """
-        Generate text and extract activations for probing.
+        Generate text and extract activations.
 
         Args:
             texts (list[str]): List of input texts to process.
