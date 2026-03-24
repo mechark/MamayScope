@@ -3,7 +3,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
     """Application settings"""
-    MODEL_NAME: str = Field(..., env="MODEL_NAME")
+    MODEL_ENDPOINT: str
    
     model_config = SettingsConfigDict(
         env_file=".env",
