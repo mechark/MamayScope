@@ -1,475 +1,3 @@
-Activated conda/uv virtual environment at /venv/main
-(main) root@C.33457600:/workspace$ git clone https://github.com/mechark/MamayScope
-Cloning into 'MamayScope'...
-Username for 'https://github.com': mechark
-Password for 'https://mechark@github.com': 
-remote: Enumerating objects: 70, done.
-remote: Counting objects: 100% (70/70), done.
-remote: Compressing objects: 100% (47/47), done.
-remote: Total 70 (delta 19), reused 62 (delta 11), pack-reused 0 (from 0)
-Receiving objects: 100% (70/70), 15.26 KiB | 7.63 MiB/s, done.
-Resolving deltas: 100% (19/19), done.
-(main) root@C.33457600:/workspace$ cd MamayScope/
-(main) root@C.33457600:/workspace/MamayScope$ ls
-README.md  pyproject.toml  src  vllm-hook-requirements.txt
-(main) root@C.33457600:/workspace/MamayScope$ pip install uv
-Collecting uv
-  Downloading uv-0.11.0-py3-none-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (11 kB)
-Downloading uv-0.11.0-py3-none-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (24.5 MB)
-   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 24.5/24.5 MB 55.5 MB/s  0:00:00
-Installing collected packages: uv
-Successfully installed uv-0.11.0
-WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
-(main) root@C.33457600:/workspace/MamayScope$ uv pip install git+https://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@github.com/mechark/vLLM-MamayHook.git#subdirectory=vl
-lm_hook_plugins
-Using Python 3.12.13 environment at: /venv/main
-    Updated https://****@github.com/mechark/vLLM-MamayHook.git (a95c7de3c1a344617d6f8a11d3b658df6214451c)
-⠼ opentelemetry-semantic-conventions==0.61b0                                                                                                                           
-Resolved 174 packages in 9.57s
-      Built vllm-hook-plugins @ git+https://****@github.com/mechark/vLLM-MamayHook.git@a95c7de3c1a344617d6f8a11d3b658df6214451c#subdirectory=vllm_hook_plugins
-⠦ Preparing packages... (9/119)
-⠧ Preparing packages... (16/119)
-⠙ Preparing packages... (19/119)
-Prepared 119 packages in 23.75s
-Uninstalled 3 packages in 158ms
-Installed 119 packages in 1.45s
- + aiohappyeyeballs==2.6.1
- + aiohttp==3.13.3
- + aiosignal==1.4.0
- + annotated-types==0.7.0
- + anthropic==0.86.0
- + apache-tvm-ffi==0.1.9
- + astor==0.8.1
- + attrs==26.1.0
- + blake3==1.0.8
- + cachetools==7.0.5
- + cbor2==5.9.0
- + cffi==2.0.0
- + cloudpickle==3.1.2
- + compressed-tensors==0.13.0
- + cryptography==46.0.5
- + cuda-python==13.0.3
- + depyf==0.20.0
- + dill==0.4.1
- + diskcache==5.6.3
- + distro==1.9.0
- + dnspython==2.8.0
- + docstring-parser==0.17.0
- + einops==0.8.2
- + email-validator==2.3.0
- + fastapi==0.135.2
- + fastapi-cli==0.0.24
- + fastapi-cloud-cli==0.15.0
- + fastar==0.9.0
- + flashinfer-python==0.6.6
- + frozenlist==1.8.0
- + gguf==0.18.0
- + googleapis-common-protos==1.73.0
- + grpcio==1.78.0
- + httptools==0.7.1
- + httpx-sse==0.4.3
- - huggingface-hub==1.7.1
- + huggingface-hub==0.36.2
- + ijson==3.5.0
- + importlib-metadata==8.7.1
- + interegular==0.3.3
- + jiter==0.13.0
- + jmespath==1.1.0
- + jsonschema==4.26.0
- + jsonschema-specifications==2025.9.1
- + lark==1.2.2
- + llguidance==1.3.0
- + llvmlite==0.44.0
- + lm-format-enforcer==0.11.3
- + loguru==0.7.3
- + mcp==1.26.0
- + mistral-common==1.10.0
- + model-hosting-container-standards==0.1.14
- + msgspec==0.20.0
- + multidict==6.7.1
- + ninja==1.13.0
- + numba==0.61.2
- - numpy==2.4.3
- + numpy==2.2.6
- + nvidia-cudnn-frontend==1.18.0
- + nvidia-cutlass-dsl==4.4.2
- + nvidia-cutlass-dsl-libs-base==4.4.2
- + nvidia-ml-py==13.595.45
- + openai==2.24.0
- + openai-harmony==0.0.8
- + opencv-python-headless==4.13.0.92
- + opentelemetry-api==1.40.0
- + opentelemetry-exporter-otlp==1.40.0
- + opentelemetry-exporter-otlp-proto-common==1.40.0
- + opentelemetry-exporter-otlp-proto-grpc==1.40.0
- + opentelemetry-exporter-otlp-proto-http==1.40.0
- + opentelemetry-proto==1.40.0
- + opentelemetry-sdk==1.40.0
- + opentelemetry-semantic-conventions==0.61b0
- + opentelemetry-semantic-conventions-ai==0.5.0
- + outlines-core==0.2.11
- + partial-json-parser==0.2.1.1.post7
- + prometheus-client==0.24.1
- + prometheus-fastapi-instrumentator==7.1.0
- + propcache==0.4.1
- + protobuf==6.33.6
- + py-cpuinfo==9.0.0
- + pybase64==1.4.3
- + pycountry==26.2.16
- + pycparser==3.0
- + pydantic==2.12.5
- + pydantic-core==2.41.5
- + pydantic-extra-types==2.11.1
- + pydantic-settings==2.13.1
- + pyjwt==2.12.1
- + python-dotenv==1.2.2
- + python-json-logger==4.0.0
- + python-multipart==0.0.22
- + quack-kernels==0.3.6
- + referencing==0.37.0
- + regex==2026.2.28
- + rich-toolkit==0.19.7
- + rignore==0.7.6
- + rpds-py==0.30.0
- + safetensors==0.7.0
- + sentry-sdk==2.56.0
- + setproctitle==1.3.7
- - setuptools==82.0.1
- + setuptools==80.10.2
- + sniffio==1.3.1
- + sse-starlette==3.3.3
- + starlette==0.52.1
- + supervisor==4.3.0
- + tabulate==0.10.0
- + tiktoken==0.12.0
- + tokenizers==0.22.2
- + torch-c-dlpack-ext==0.1.5
- + transformers==4.57.6
- + typing-inspection==0.4.2
- + uvicorn==0.42.0
- + uvloop==0.22.1
- + vllm==0.18.0
- + vllm-hook-plugins==0.1.0 (from git+https://****@github.com/mechark/vLLM-MamayHook.git@a95c7de3c1a344617d6f8a11d3b658df6214451c#subdirectory=vllm_hook_plugins)
- + watchfiles==1.1.1
- + websockets==16.0
- + xgrammar==0.1.32
- + yarl==1.23.0
- + zipp==3.23.0
-(main) root@C.33457600:/workspace/MamayScope$ uv venv mamay-venv --python 3.10
-Using CPython 3.10.20
-warning: The requested interpreter resolved to Python 3.10.20, which is incompatible with the project's Python requirement: `>=3.13` (from `project.requires-python`)
-Creating virtual environment at: mamay-venv
-Activate with: source mamay-venv/bin/activate
-(main) root@C.33457600:/workspace/MamayScope$ source mamay-venv/bin/activate
-(mamay-venv) (main) root@C.33457600:/workspace/MamayScope$ v
-validlocale               vendstat                  vigr                      vipe                      vkcubepp                  vulkaninfo
-varlinkctl                venv-backup.sh            vim                       vipw                      vkgears                   
-vastai                    vi                        vim.basic                 visudo                    vkgears.x86_64-linux-gnu  
-vdir                      vidir                     vimdiff                   vkcube                    vllm                      
-vdpa                      view                      vimtutor                  vkcube-wayland            vmstat                    
-(mamay-venv) (main) root@C.33457600:/workspace/MamayScope$ ls
-README.md  mamay-venv  pyproject.toml  src  vllm-hook-requirements.txt
-(mamay-venv) (main) root@C.33457600:/workspace/MamayScope$ uv pip install vllm-hook-requirements.txt
-✔ `vllm-hook-requirements.txt` looks like a local requirements file but was passed as a package name. Did you mean `-r vllm-hook-requirements.txt`? · yes
-Using Python 3.10.20 environment at: mamay-venv
-  × No solution found when resolving dependencies:
-  ╰─▶ Because there is no version of torch==2.4.1+cu124 and you require torch==2.4.1+cu124, we can conclude that your requirements are unsatisfiable.
-(mamay-venv) (main) root@C.33457600:/workspace/MamayScope$ uv pip install -r vllm-hook-requirements.txt --extra-index-url https://download.pytorch.org/whl/cu124
-Using Python 3.10.20 environment at: mamay-venv
-  × No solution found when resolving dependencies:
-  ╰─▶ Because there is no version of certifi==2024.8.30 and you require certifi==2024.8.30, we can conclude that your requirements are unsatisfiable.
-
-      hint: `certifi` was found on https://download.pytorch.org/whl/cu124, but not at the requested version (certifi==2024.8.30). A compatible version may be
-      available on a subsequent index (e.g., https://pypi.org/simple). By default, uv will only consider versions that are published on the first index that contains
-      a given package, to avoid dependency confusion attacks. If all indexes are equally trusted, use `--index-strategy unsafe-best-match` to consider all versions
-      from all indexes, regardless of the order in which they were defined.
-(mamay-venv) (main) root@C.33457600:/workspace/MamayScope$ uv pip install -r vllm-hook-requirements.txt --extra-index-url https://download.pytorch.org/whl/cu124 --index-strategy unsafe-best-match
-Using Python 3.10.20 environment at: mamay-venv
-Resolved 131 packages in 2m 13s
-      Built jupyter-contrib-nbextensions==0.7.0
-      Built jupyter-contrib-core==0.4.2
-Prepared 131 packages in 37.27s
-Installed 131 packages in 3.28s
- + anyio==4.6.0
- + argon2-cffi==23.1.0
- + argon2-cffi-bindings==21.2.0
- + arrow==1.3.0
- + asttokens==2.4.1
- + async-lru==2.0.4
- + attrs==24.2.0
- + babel==2.16.0
- + beautifulsoup4==4.12.3
- + bleach==6.1.0
- + certifi==2024.8.30
- + cffi==1.17.1
- + charset-normalizer==3.3.2
- + comm==0.2.2
- + debugpy==1.8.5
- + decorator==5.1.1
- + defusedxml==0.7.1
- + entrypoints==0.4
- + exceptiongroup==1.3.1
- + executing==2.1.0
- + fastjsonschema==2.20.0
- + filelock==3.13.1
- + fqdn==1.5.1
- + fsspec==2024.2.0
- + h11==0.14.0
- + httpcore==1.0.5
- + httpx==0.27.2
- + idna==3.10
- + ipykernel==6.29.5
- + ipython==8.27.0
- + ipython-genutils==0.2.0
- + ipywidgets==8.1.5
- + isoduration==20.11.0
- + jedi==0.19.1
- + jinja2==3.1.3
- + json5==0.9.25
- + jsonpointer==3.0.0
- + jsonschema==4.23.0
- + jsonschema-specifications==2023.12.1
- + jupyter-archive==3.4.0
- + jupyter-client==7.4.9
- + jupyter-contrib-core==0.4.2
- + jupyter-contrib-nbextensions==0.7.0
- + jupyter-core==5.7.2
- + jupyter-events==0.10.0
- + jupyter-highlight-selected-word==0.2.0
- + jupyter-lsp==2.2.5
- + jupyter-nbextensions-configurator==0.6.4
- + jupyter-server==2.14.2
- + jupyter-server-terminals==0.5.3
- + jupyterlab==4.2.5
- + jupyterlab-pygments==0.3.0
- + jupyterlab-server==2.27.3
- + jupyterlab-widgets==3.0.13
- + lxml==5.3.0
- + markupsafe==2.1.5
- + matplotlib-inline==0.1.7
- + mistune==3.0.2
- + mpmath==1.3.0
- + nbclassic==1.1.0
- + nbclient==0.10.0
- + nbconvert==7.16.4
- + nbformat==5.10.4
- + nest-asyncio==1.6.0
- + networkx==3.2.1
- + notebook==6.5.5
- + notebook-shim==0.2.4
- + numpy==1.26.3
- + nvidia-cublas-cu12==12.4.2.65
- + nvidia-cuda-cupti-cu12==12.4.99
- + nvidia-cuda-nvrtc-cu12==12.4.99
- + nvidia-cuda-runtime-cu12==12.4.99
- + nvidia-cudnn-cu12==9.1.0.70
- + nvidia-cufft-cu12==11.2.0.44
- + nvidia-curand-cu12==10.3.5.119
- + nvidia-cusolver-cu12==11.6.0.99
- + nvidia-cusparse-cu12==12.3.0.142
- + nvidia-nccl-cu12==2.20.5
- + nvidia-nvjitlink-cu12==12.4.99
- + nvidia-nvtx-cu12==12.4.99
- + overrides==7.7.0
- + packaging==24.1
- + pandocfilters==1.5.1
- + parso==0.8.4
- + pexpect==4.9.0
- + pillow==10.2.0
- + pip==24.2
- + platformdirs==4.3.6
- + prometheus-client==0.21.0
- + prompt-toolkit==3.0.47
- + psutil==6.0.0
- + ptyprocess==0.7.0
- + pure-eval==0.2.3
- + pycparser==2.22
- + pygments==2.18.0
- + python-dateutil==2.9.0.post0
- + python-json-logger==2.0.7
- + pyyaml==6.0.2
- + pyzmq==24.0.1
- + referencing==0.35.1
- + requests==2.32.3
- + rfc3339-validator==0.1.4
- + rfc3986-validator==0.1.1
- + rpds-py==0.20.0
- + send2trash==1.8.3
- + setuptools==75.1.0
- + six==1.17.0
- + sniffio==1.3.1
- + soupsieve==2.6
- + stack-data==0.6.3
- + sympy==1.12
- + terminado==0.18.1
- + tinycss2==1.3.0
- + tomli==2.4.0
- + torch==2.4.1+cu124
- + torchaudio==2.4.1+cu124
- + torchvision==0.19.1+cu124
- + tornado==6.4.1
- + traitlets==5.14.3
- + triton==3.0.0
- + types-python-dateutil==2.9.0.20240906
- + typing-extensions==4.9.0
- + uri-template==1.3.0
- + urllib3==2.2.3
- + uv==0.10.11
- + wcwidth==0.2.13
- + webcolors==24.8.0
- + webencodings==0.5.1
- + websocket-client==1.8.0
- + wheel==0.44.0
- + widgetsnbextension==4.0.13
-(mamay-venv) (main) root@C.33457600:/workspace/MamayScope$ apt-get update && apt-get install -y libzmq3-dev
-Hit:1 http://archive.ubuntu.com/ubuntu noble InRelease
-Hit:2 http://archive.ubuntu.com/ubuntu noble-updates InRelease
-Hit:3 http://archive.ubuntu.com/ubuntu noble-backports InRelease
-Hit:4 http://security.ubuntu.com/ubuntu noble-security InRelease
-Hit:5 https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2404/x86_64  InRelease
-Reading package lists... Done
-Reading package lists... Done
-Building dependency tree... Done
-Reading state information... Done
-The following additional packages will be installed:
-  comerr-dev cppzmq-dev krb5-multidev libbsd-dev libgssrpc4t64 libkadm5clnt-mit12 libkadm5srv-mit12 libkdb5-10t64 libkrb5-dev libmd-dev libnorm-dev libpgm-dev
-  libsodium-dev
-Suggested packages:
-  doc-base krb5-doc krb5-user libnorm-doc
-The following NEW packages will be installed:
-  comerr-dev cppzmq-dev krb5-multidev libbsd-dev libgssrpc4t64 libkadm5clnt-mit12 libkadm5srv-mit12 libkdb5-10t64 libkrb5-dev libmd-dev libnorm-dev libpgm-dev
-  libsodium-dev libzmq3-dev
-0 upgraded, 14 newly installed, 0 to remove and 10 not upgraded.
-Need to get 1964 kB of archives.
-After this operation, 9144 kB of additional disk space will be used.
-Get:1 http://archive.ubuntu.com/ubuntu noble/universe amd64 libpgm-dev amd64 5.3.128~dfsg-2.1build1 [212 kB]
-Get:2 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libsodium-dev amd64 1.0.18-1ubuntu0.24.04.1 [185 kB]
-Get:3 http://archive.ubuntu.com/ubuntu noble/universe amd64 libnorm-dev amd64 1.5.9+dfsg-3.1build1 [429 kB]
-Get:4 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 comerr-dev amd64 2.1-1.47.0-2.4~exp1ubuntu4.1 [43.8 kB]
-Get:5 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libgssrpc4t64 amd64 1.20.1-6ubuntu2.6 [57.6 kB]
-Get:6 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libkadm5clnt-mit12 amd64 1.20.1-6ubuntu2.6 [40.1 kB]
-Get:7 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libkdb5-10t64 amd64 1.20.1-6ubuntu2.6 [40.4 kB]
-Get:8 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libkadm5srv-mit12 amd64 1.20.1-6ubuntu2.6 [53.0 kB]
-Get:9 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 krb5-multidev amd64 1.20.1-6ubuntu2.6 [125 kB]
-Get:10 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libkrb5-dev amd64 1.20.1-6ubuntu2.6 [11.9 kB]
-Get:11 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libmd-dev amd64 1.1.0-2build1.1 [45.5 kB]
-Get:12 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libbsd-dev amd64 0.12.1-1build1.1 [169 kB]
-Get:13 http://archive.ubuntu.com/ubuntu noble/universe amd64 libzmq3-dev amd64 4.3.5-1build2 [527 kB]
-Get:14 http://archive.ubuntu.com/ubuntu noble/universe amd64 cppzmq-dev amd64 4.10.0-1build1 [26.0 kB]
-Fetched 1964 kB in 0s (8700 kB/s)     
-debconf: delaying package configuration, since apt-utils is not installed
-Selecting previously unselected package libpgm-dev:amd64.
-(Reading database ... 42029 files and directories currently installed.)
-Preparing to unpack .../00-libpgm-dev_5.3.128~dfsg-2.1build1_amd64.deb ...
-Unpacking libpgm-dev:amd64 (5.3.128~dfsg-2.1build1) ...
-Selecting previously unselected package libsodium-dev:amd64.
-Preparing to unpack .../01-libsodium-dev_1.0.18-1ubuntu0.24.04.1_amd64.deb ...
-Unpacking libsodium-dev:amd64 (1.0.18-1ubuntu0.24.04.1) ...
-Selecting previously unselected package libnorm-dev:amd64.
-Preparing to unpack .../02-libnorm-dev_1.5.9+dfsg-3.1build1_amd64.deb ...
-Unpacking libnorm-dev:amd64 (1.5.9+dfsg-3.1build1) ...
-Selecting previously unselected package comerr-dev:amd64.
-Preparing to unpack .../03-comerr-dev_2.1-1.47.0-2.4~exp1ubuntu4.1_amd64.deb ...
-Unpacking comerr-dev:amd64 (2.1-1.47.0-2.4~exp1ubuntu4.1) ...
-Selecting previously unselected package libgssrpc4t64:amd64.
-Preparing to unpack .../04-libgssrpc4t64_1.20.1-6ubuntu2.6_amd64.deb ...
-Unpacking libgssrpc4t64:amd64 (1.20.1-6ubuntu2.6) ...
-Selecting previously unselected package libkadm5clnt-mit12:amd64.
-Preparing to unpack .../05-libkadm5clnt-mit12_1.20.1-6ubuntu2.6_amd64.deb ...
-Unpacking libkadm5clnt-mit12:amd64 (1.20.1-6ubuntu2.6) ...
-Selecting previously unselected package libkdb5-10t64:amd64.
-Preparing to unpack .../06-libkdb5-10t64_1.20.1-6ubuntu2.6_amd64.deb ...
-Unpacking libkdb5-10t64:amd64 (1.20.1-6ubuntu2.6) ...
-Selecting previously unselected package libkadm5srv-mit12:amd64.
-Preparing to unpack .../07-libkadm5srv-mit12_1.20.1-6ubuntu2.6_amd64.deb ...
-Unpacking libkadm5srv-mit12:amd64 (1.20.1-6ubuntu2.6) ...
-Selecting previously unselected package krb5-multidev:amd64.
-Preparing to unpack .../08-krb5-multidev_1.20.1-6ubuntu2.6_amd64.deb ...
-Unpacking krb5-multidev:amd64 (1.20.1-6ubuntu2.6) ...
-Selecting previously unselected package libkrb5-dev:amd64.
-Preparing to unpack .../09-libkrb5-dev_1.20.1-6ubuntu2.6_amd64.deb ...
-Unpacking libkrb5-dev:amd64 (1.20.1-6ubuntu2.6) ...
-Selecting previously unselected package libmd-dev:amd64.
-Preparing to unpack .../10-libmd-dev_1.1.0-2build1.1_amd64.deb ...
-Unpacking libmd-dev:amd64 (1.1.0-2build1.1) ...
-Selecting previously unselected package libbsd-dev:amd64.
-Preparing to unpack .../11-libbsd-dev_0.12.1-1build1.1_amd64.deb ...
-Unpacking libbsd-dev:amd64 (0.12.1-1build1.1) ...
-Selecting previously unselected package libzmq3-dev:amd64.
-Preparing to unpack .../12-libzmq3-dev_4.3.5-1build2_amd64.deb ...
-Unpacking libzmq3-dev:amd64 (4.3.5-1build2) ...
-Selecting previously unselected package cppzmq-dev:amd64.
-Preparing to unpack .../13-cppzmq-dev_4.10.0-1build1_amd64.deb ...
-Unpacking cppzmq-dev:amd64 (4.10.0-1build1) ...
-Setting up libnorm-dev:amd64 (1.5.9+dfsg-3.1build1) ...
-Setting up libgssrpc4t64:amd64 (1.20.1-6ubuntu2.6) ...
-Setting up libpgm-dev:amd64 (5.3.128~dfsg-2.1build1) ...
-Setting up comerr-dev:amd64 (2.1-1.47.0-2.4~exp1ubuntu4.1) ...
-Setting up libsodium-dev:amd64 (1.0.18-1ubuntu0.24.04.1) ...
-Setting up libmd-dev:amd64 (1.1.0-2build1.1) ...
-Setting up libbsd-dev:amd64 (0.12.1-1build1.1) ...
-Setting up libkadm5clnt-mit12:amd64 (1.20.1-6ubuntu2.6) ...
-Setting up libkdb5-10t64:amd64 (1.20.1-6ubuntu2.6) ...
-Setting up libkadm5srv-mit12:amd64 (1.20.1-6ubuntu2.6) ...
-Setting up krb5-multidev:amd64 (1.20.1-6ubuntu2.6) ...
-Setting up libkrb5-dev:amd64 (1.20.1-6ubuntu2.6) ...
-Setting up libzmq3-dev:amd64 (4.3.5-1build2) ...
-Setting up cppzmq-dev:amd64 (4.10.0-1build1) ...
-Processing triggers for man-db (2.12.0-4build2) ...
-Processing triggers for libc-bin (2.39-0ubuntu8.7) ...
-(mamay-venv) (main) root@C.33457600:/workspace/MamayScope$ python -m src.services.mamay_service
-Traceback (most recent call last):
-  File "/.uv/python_install/cpython-3.10-linux-x86_64-gnu/lib/python3.10/runpy.py", line 196, in _run_module_as_main
-    return _run_code(code, main_globals, None,
-  File "/.uv/python_install/cpython-3.10-linux-x86_64-gnu/lib/python3.10/runpy.py", line 86, in _run_code
-    exec(code, run_globals)
-  File "/workspace/MamayScope/src/services/mamay_service.py", line 2, in <module>
-    from vllm_hook_plugins import HookedMamay
-ModuleNotFoundError: No module named 'vllm_hook_plugins'
-(mamay-venv) (main) root@C.33457600:/workspace/MamayScope$ apt-get install vim
-Reading package lists... Done
-Building dependency tree... Done
-Reading state information... Done
-vim is already the newest version (2:9.1.0016-1ubuntu7.10).
-0 upgraded, 0 newly installed, 0 to remove and 10 not upgraded.
-(mamay-venv) (main) root@C.33457600:/workspace/MamayScope$ uv pip install git+https://github.com/IBM/vLLM-Hook.git#subdirectory=vllm_hook_plugins
-Using Python 3.10.20 environment at: mamay-venv
-    Updated https://github.com/IBM/vLLM-Hook.git (7f5fd04702091f83def96ae600dc87217a41141d)
-Resolved 176 packages in 4.94s
-      Built vllm-hook-plugins @ git+https://github.com/IBM/vLLM-Hook.git@7f5fd04702091f83def96ae600dc87217a41141d#subdirectory=vllm_hook_plugins
-⠇ Preparing packages... (132/148)
-Prepared 148 packages in 1m 55s
-Uninstalled 25 packages in 900ms
-Installed 148 packages in 3.77s
- + aiohappyeyeballs==2.6.1
- + aiohttp==3.13.3
- + aiosignal==1.4.0
- + annotated-doc==0.0.4
- + annotated-types==0.7.0
- + anthropic==0.86.0
- + apache-tvm-ffi==0.1.9
- + astor==0.8.1
- + async-timeout==5.0.1
- + blake3==1.0.8
- + cachetools==7.0.5
- + cbor2==5.9.0
- - cffi==1.17.1
- + cffi==2.0.0
- + click==8.3.1
- + cloudpickle==3.1.2
- + compressed-tensors==0.13.0
- + cryptography==46.0.5
- + cuda-bindings==12.9.4
- + cuda-pathfinder==1.4.4
- + cuda-python==12.9.4
- + depyf==0.20.0
- + dill==0.4.1
- + diskcache==5.6.3
- + distro==1.9.0
- + dnspython==2.8.0
- + docstring-parser==0.17.0
- + einops==0.8.2
- + email-validator==2.3.0
  + fastapi==0.135.2
  + fastapi-cli==0.0.24
  + fastapi-cloud-cli==0.15.0
@@ -636,3 +164,704 @@ Uninstalled 1 package in 2ms
 Installed 1 package in 4ms
  - vllm-hook-plugins==0.1.0 (from git+https://github.com/IBM/vLLM-Hook.git@7f5fd04702091f83def96ae600dc87217a41141d#subdirectory=vllm_hook_plugins)
  + vllm-hook-plugins==0.1.0 (from git+https://****@github.com/mechark/vLLM-MamayHook.git@a95c7de3c1a344617d6f8a11d3b658df6214451c#subdirectory=vllm_hook_plugins)
+(mamay-venv) (main) root@C.33457600:/workspace/MamayScope$ python -m src.services.mamay_service
+INFO 03-24 15:54:59 [utils.py:233] non-default args: {'trust_remote_code': True, 'download_dir': '~/.cache', 'dtype': torch.bfloat16, 'max_model_len': 2048, 'gpu_memory_utilization': 0.95, 'disable_log_stats': True, 'enforce_eager': True, 'worker_cls': 'vllm_hook_plugins.workers.residual_stream_worker.ResidualStreamWorker', 'model': 'INSAIT-Institute/MamayLM-Gemma-2-9B-IT-v0.1'}
+WARNING 03-24 15:54:59 [envs.py:1717] Unknown vLLM environment variable detected: VLLM_IMPORTANT_LAYERS
+WARNING 03-24 15:54:59 [envs.py:1717] Unknown vLLM environment variable detected: VLLM_HOOK_DIR
+WARNING 03-24 15:54:59 [envs.py:1717] Unknown vLLM environment variable detected: VLLM_HOOK_FLAG
+WARNING 03-24 15:54:59 [envs.py:1717] Unknown vLLM environment variable detected: VLLM_RUN_ID
+config.json: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 852/852 [00:00<00:00, 8.29MB/s]
+INFO 03-24 15:55:08 [model.py:533] Resolved architecture: Gemma2ForCausalLM
+INFO 03-24 15:55:08 [model.py:1582] Using max model len 2048
+INFO 03-24 15:55:08 [scheduler.py:231] Chunked prefill is enabled with max_num_batched_tokens=8192.
+INFO 03-24 15:55:08 [vllm.py:754] Asynchronous scheduling is enabled.
+WARNING 03-24 15:55:08 [vllm.py:788] Enforce eager set, disabling torch.compile and CUDAGraphs. This is equivalent to setting -cc.mode=none -cc.cudagraph_mode=none
+WARNING 03-24 15:55:08 [vllm.py:799] Inductor compilation was disabled by user settings, optimizations settings that are only active during inductor compilation will be ignored.
+INFO 03-24 15:55:08 [vllm.py:964] Cudagraph is disabled under eager mode
+INFO 03-24 15:55:08 [compilation.py:289] Enabled custom fusions: norm_quant, act_quant
+tokenizer_config.json: 47.0kB [00:00, 166MB/s]
+tokenizer.json: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████| 34.4M/34.4M [00:01<00:00, 28.0MB/s]
+special_tokens_map.json: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████| 636/636 [00:00<00:00, 6.28MB/s]
+generation_config.json: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████| 168/168 [00:00<00:00, 2.01MB/s]
+(EngineCore pid=3642) INFO 03-24 15:55:13 [core.py:103] Initializing a V1 LLM engine (v0.18.0) with config: model='INSAIT-Institute/MamayLM-Gemma-2-9B-IT-v0.1', speculative_config=None, tokenizer='INSAIT-Institute/MamayLM-Gemma-2-9B-IT-v0.1', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, tokenizer_revision=None, trust_remote_code=True, dtype=torch.bfloat16, max_seq_len=2048, download_dir='~/.cache', load_format=auto, tensor_parallel_size=1, pipeline_parallel_size=1, data_parallel_size=1, decode_context_parallel_size=1, dcp_comm_backend=ag_rs, disable_custom_all_reduce=False, quantization=None, enforce_eager=True, enable_return_routed_experts=False, kv_cache_dtype=auto, device_config=cuda, structured_outputs_config=StructuredOutputsConfig(backend='auto', disable_any_whitespace=False, disable_additional_properties=False, reasoning_parser='', reasoning_parser_plugin='', enable_in_reasoning=False), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None, kv_cache_metrics=False, kv_cache_metrics_sample=0.01, cudagraph_metrics=False, enable_layerwise_nvtx_tracing=False, enable_mfu_metrics=False, enable_mm_processor_stats=False, enable_logging_iteration_details=False), seed=0, served_model_name=INSAIT-Institute/MamayLM-Gemma-2-9B-IT-v0.1, enable_prefix_caching=True, enable_chunked_prefill=True, pooler_config=None, compilation_config={'mode': <CompilationMode.NONE: 0>, 'debug_dump_path': None, 'cache_dir': '', 'compile_cache_save_format': 'binary', 'backend': 'inductor', 'custom_ops': ['all'], 'splitting_ops': [], 'compile_mm_encoder': False, 'compile_sizes': [], 'compile_ranges_endpoints': [8192], 'inductor_compile_config': {'enable_auto_functionalized_v2': False, 'combo_kernels': True, 'benchmark_combo_kernel': True}, 'inductor_passes': {}, 'cudagraph_mode': <CUDAGraphMode.NONE: 0>, 'cudagraph_num_of_warmups': 0, 'cudagraph_capture_sizes': [], 'cudagraph_copy_inputs': False, 'cudagraph_specialize_lora': True, 'use_inductor_graph_partition': False, 'pass_config': {'fuse_norm_quant': True, 'fuse_act_quant': True, 'fuse_attn_quant': False, 'enable_sp': False, 'fuse_gemm_comms': False, 'fuse_allreduce_rms': False}, 'max_cudagraph_capture_size': 0, 'dynamic_shapes_config': {'type': <DynamicShapesType.BACKED: 'backed'>, 'evaluate_guards': False, 'assume_32_bit_indexing': False}, 'local_cache_dir': None, 'fast_moe_cold_start': True, 'static_all_moe_layers': []}
+(EngineCore pid=3642) INFO 03-24 15:55:13 [parallel_state.py:1395] world_size=1 rank=0 local_rank=0 distributed_init_method=tcp://172.17.0.8:58567 backend=nccl
+(EngineCore pid=3642) INFO 03-24 15:55:13 [parallel_state.py:1717] rank 0 in world size 1 is assigned as DP rank 0, PP rank 0, PCP rank 0, TP rank 0, EP rank N/A, EPLB rank N/A
+(EngineCore pid=3642) INFO 03-24 15:55:14 [gpu_model_runner.py:4481] Starting to load model INSAIT-Institute/MamayLM-Gemma-2-9B-IT-v0.1...
+(EngineCore pid=3642) INFO 03-24 15:55:15 [cuda.py:317] Using FLASH_ATTN attention backend out of potential backends: ['FLASH_ATTN', 'FLASHINFER', 'TRITON_ATTN', 'FLEX_ATTENTION'].
+(EngineCore pid=3642) INFO 03-24 15:55:15 [flash_attn.py:598] Using FlashAttention version 2
+model.safetensors.index.json: 39.1kB [00:00, 68.1MB/s]
+(EngineCore pid=3642) WARNING 03-24 15:55:16 [weight_utils.py:542] Failed to get file list for 'INSAIT-Institute/MamayLM-Gemma-2-9B-IT-v0.1'. Trying each pattern in allow_patterns individually until weights have been downloaded. Error: [Errno 2] No such file or directory: '../../blobs/43bf0e426e9bf12945463de98856c221831faf66' -> '/root/.cache/models--INSAIT-Institute--MamayLM-Gemma-2-9B-IT-v0.1/snapshots/c6f0a6d999c433b2a2d727e95c288255c157c303/model.safetensors.index.json'
+model-00004-of-00004.safetensors: 100%|███████████████████████████████████████████████████████████████████████████████████████████| 3.67G/3.67G [02:01<00:00, 30.2MB/s]
+model-00002-of-00004.safetensors: 100%|███████████████████████████████████████████████████████████████████████████████████████████| 4.95G/4.95G [02:24<00:00, 34.3MB/s]
+model-00001-of-00004.safetensors: 100%|███████████████████████████████████████████████████████████████████████████████████████████| 4.90G/4.90G [02:25<00:00, 33.7MB/s]
+model-00003-of-00004.safetensors: 100%|███████████████████████████████████████████████████████████████████████████████████████████| 4.96G/4.96G [02:25<00:00, 34.1MB/s]
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099] EngineCore failed to start.██████████████████████████████████████████████| 4.96G/4.96G [02:25<00:00, 176MB/s]
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099] Traceback (most recent call last):
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]   File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/vllm/v1/engine/core.py", line 1073, in run_engine_core
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]     engine_core = EngineCoreProc(*args, engine_index=dp_rank, **kwargs)
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]   File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/vllm/tracing/otel.py", line 178, in sync_wrapper
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]     return func(*args, **kwargs)
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]   File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/vllm/v1/engine/core.py", line 839, in __init__
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]     super().__init__(
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]   File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/vllm/v1/engine/core.py", line 112, in __init__
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]     self.model_executor = executor_class(vllm_config)
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]   File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/vllm/tracing/otel.py", line 178, in sync_wrapper
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]     return func(*args, **kwargs)
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]   File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/vllm/v1/executor/abstract.py", line 103, in __init__
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]     self._init_executor()
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]   File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/vllm/v1/executor/uniproc_executor.py", line 50, in _init_executor
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]     self.driver_worker.load_model()
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]   File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/vllm_hook_plugins/workers/residual_stream_worker.py", line 12, in load_model
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]     r = super().load_model(*args, **kwargs)
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]   File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/vllm/v1/worker/gpu_worker.py", line 335, in load_model
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]     self.model_runner.load_model(load_dummy_weights=dummy_weights)
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]   File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/vllm/tracing/otel.py", line 178, in sync_wrapper
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]     return func(*args, **kwargs)
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]   File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/vllm/v1/worker/gpu_model_runner.py", line 4497, in load_model
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]     self.model = model_loader.load_model(
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]   File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/vllm/tracing/otel.py", line 178, in sync_wrapper
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]     return func(*args, **kwargs)
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]   File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/vllm/model_executor/model_loader/base_loader.py", line 62, in load_model
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]     self.load_weights(model, model_config)
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]   File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/vllm/tracing/otel.py", line 178, in sync_wrapper
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]     return func(*args, **kwargs)
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]   File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/vllm/model_executor/model_loader/default_loader.py", line 381, in load_weights
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]     loaded_weights = model.load_weights(self.get_all_weights(model_config, model))
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]   File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/vllm/model_executor/models/gemma2.py", line 431, in load_weights
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]     return loader.load_weights(weights)
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]   File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/vllm/model_executor/model_loader/reload/torchao_decorator.py", line 50, in patched_model_load_weights
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]     return original_load_weights(self, weights, *args, **kwargs)
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]   File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/vllm/model_executor/models/utils.py", line 348, in load_weights
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]     autoloaded_weights = set(self._load_module("", self.module, weights))
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]   File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/vllm/model_executor/models/utils.py", line 286, in _load_module
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]     for child_prefix, child_weights in self._groupby_prefix(weights):
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]   File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/vllm/model_executor/models/utils.py", line 170, in _groupby_prefix
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]     for prefix, group in itertools.groupby(weights_by_parts, key=lambda x: x[0][0]):
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]   File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/vllm/model_executor/models/utils.py", line 165, in <genexpr>
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]     weights_by_parts = (
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]   File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/vllm/model_executor/models/utils.py", line 344, in <genexpr>
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]     weights = (
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]   File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/vllm/model_executor/model_loader/default_loader.py", line 286, in get_all_weights
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]     yield from self._get_weights_iterator(primary_weights)
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]   File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/vllm/model_executor/model_loader/default_loader.py", line 208, in _get_weights_iterator
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]     hf_folder, hf_weights_files, use_safetensors = self._prepare_weights(
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]   File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/vllm/model_executor/model_loader/default_loader.py", line 154, in _prepare_weights
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]     hf_folder = download_weights_from_hf(
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]   File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/vllm/tracing/otel.py", line 178, in sync_wrapper
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]     return func(*args, **kwargs)
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]   File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/vllm/model_executor/model_loader/weight_utils.py", line 556, in download_weights_from_hf
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]     hf_folder = snapshot_download(
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]   File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 114, in _inner_fn
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]     return fn(*args, **kwargs)
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]   File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/huggingface_hub/_snapshot_download.py", line 332, in snapshot_download
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]     thread_map(
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]   File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/tqdm/contrib/concurrent.py", line 69, in thread_map
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]     return _executor_map(ThreadPoolExecutor, fn, *iterables, **tqdm_kwargs)
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]   File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/tqdm/contrib/concurrent.py", line 51, in _executor_map
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]     return list(tqdm_class(ex.map(fn, *iterables, chunksize=chunksize), **kwargs))
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]   File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/tqdm/std.py", line 1169, in __iter__
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]     for obj in iterable:
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]   File "/.uv/python_install/cpython-3.10-linux-x86_64-gnu/lib/python3.10/concurrent/futures/_base.py", line 621, in result_iterator
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]     yield _result_or_cancel(fs.pop())
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]   File "/.uv/python_install/cpython-3.10-linux-x86_64-gnu/lib/python3.10/concurrent/futures/_base.py", line 319, in _result_or_cancel
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]     return fut.result(timeout)
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]   File "/.uv/python_install/cpython-3.10-linux-x86_64-gnu/lib/python3.10/concurrent/futures/_base.py", line 458, in result
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]     return self.__get_result()
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]   File "/.uv/python_install/cpython-3.10-linux-x86_64-gnu/lib/python3.10/concurrent/futures/_base.py", line 403, in __get_result
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]     raise self._exception
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]   File "/.uv/python_install/cpython-3.10-linux-x86_64-gnu/lib/python3.10/concurrent/futures/thread.py", line 58, in run
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]     result = self.fn(*self.args, **self.kwargs)
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]   File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/huggingface_hub/_snapshot_download.py", line 306, in _inner_hf_hub_download
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]     return hf_hub_download(
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]   File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 114, in _inner_fn
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]     return fn(*args, **kwargs)
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]   File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 1014, in hf_hub_download
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]     return _hf_hub_download_to_cache_dir(
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]   File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 1188, in _hf_hub_download_to_cache_dir
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]     _create_symlink(blob_path, pointer_path, new_blob=True)
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]   File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 738, in _create_symlink
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099]     os.symlink(src_rel_or_abs, abs_dst)
+(EngineCore pid=3642) ERROR 03-24 15:57:43 [core.py:1099] FileNotFoundError: [Errno 2] No such file or directory: '../../blobs/7b142e830f43c228d109ddf6811c21339cca829a9d11dac1883d20cb238c5622' -> '/root/.cache/models--INSAIT-Institute--MamayLM-Gemma-2-9B-IT-v0.1/snapshots/c6f0a6d999c433b2a2d727e95c288255c157c303/model-00001-of-00004.safetensors'
+(EngineCore pid=3642) Process EngineCore:
+(EngineCore pid=3642) Traceback (most recent call last):
+(EngineCore pid=3642)   File "/.uv/python_install/cpython-3.10-linux-x86_64-gnu/lib/python3.10/multiprocessing/process.py", line 314, in _bootstrap
+(EngineCore pid=3642)     self.run()
+(EngineCore pid=3642)   File "/.uv/python_install/cpython-3.10-linux-x86_64-gnu/lib/python3.10/multiprocessing/process.py", line 108, in run
+(EngineCore pid=3642)     self._target(*self._args, **self._kwargs)
+(EngineCore pid=3642)   File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/vllm/v1/engine/core.py", line 1103, in run_engine_core
+(EngineCore pid=3642)     raise e
+(EngineCore pid=3642)   File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/vllm/v1/engine/core.py", line 1073, in run_engine_core
+(EngineCore pid=3642)     engine_core = EngineCoreProc(*args, engine_index=dp_rank, **kwargs)
+(EngineCore pid=3642)   File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/vllm/tracing/otel.py", line 178, in sync_wrapper
+(EngineCore pid=3642)     return func(*args, **kwargs)
+(EngineCore pid=3642)   File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/vllm/v1/engine/core.py", line 839, in __init__
+(EngineCore pid=3642)     super().__init__(
+(EngineCore pid=3642)   File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/vllm/v1/engine/core.py", line 112, in __init__
+(EngineCore pid=3642)     self.model_executor = executor_class(vllm_config)
+(EngineCore pid=3642)   File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/vllm/tracing/otel.py", line 178, in sync_wrapper
+(EngineCore pid=3642)     return func(*args, **kwargs)
+(EngineCore pid=3642)   File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/vllm/v1/executor/abstract.py", line 103, in __init__
+(EngineCore pid=3642)     self._init_executor()
+(EngineCore pid=3642)   File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/vllm/v1/executor/uniproc_executor.py", line 50, in _init_executor
+(EngineCore pid=3642)     self.driver_worker.load_model()
+(EngineCore pid=3642)   File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/vllm_hook_plugins/workers/residual_stream_worker.py", line 12, in load_model
+(EngineCore pid=3642)     r = super().load_model(*args, **kwargs)
+(EngineCore pid=3642)   File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/vllm/v1/worker/gpu_worker.py", line 335, in load_model
+(EngineCore pid=3642)     self.model_runner.load_model(load_dummy_weights=dummy_weights)
+(EngineCore pid=3642)   File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/vllm/tracing/otel.py", line 178, in sync_wrapper
+(EngineCore pid=3642)     return func(*args, **kwargs)
+(EngineCore pid=3642)   File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/vllm/v1/worker/gpu_model_runner.py", line 4497, in load_model
+(EngineCore pid=3642)     self.model = model_loader.load_model(
+(EngineCore pid=3642)   File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/vllm/tracing/otel.py", line 178, in sync_wrapper
+(EngineCore pid=3642)     return func(*args, **kwargs)
+(EngineCore pid=3642)   File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/vllm/model_executor/model_loader/base_loader.py", line 62, in load_model
+(EngineCore pid=3642)     self.load_weights(model, model_config)
+(EngineCore pid=3642)   File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/vllm/tracing/otel.py", line 178, in sync_wrapper
+(EngineCore pid=3642)     return func(*args, **kwargs)
+(EngineCore pid=3642)   File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/vllm/model_executor/model_loader/default_loader.py", line 381, in load_weights
+(EngineCore pid=3642)     loaded_weights = model.load_weights(self.get_all_weights(model_config, model))
+(EngineCore pid=3642)   File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/vllm/model_executor/models/gemma2.py", line 431, in load_weights
+(EngineCore pid=3642)     return loader.load_weights(weights)
+(EngineCore pid=3642)   File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/vllm/model_executor/model_loader/reload/torchao_decorator.py", line 50, in patched_model_load_weights
+(EngineCore pid=3642)     return original_load_weights(self, weights, *args, **kwargs)
+(EngineCore pid=3642)   File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/vllm/model_executor/models/utils.py", line 348, in load_weights
+(EngineCore pid=3642)     autoloaded_weights = set(self._load_module("", self.module, weights))
+(EngineCore pid=3642)   File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/vllm/model_executor/models/utils.py", line 286, in _load_module
+(EngineCore pid=3642)     for child_prefix, child_weights in self._groupby_prefix(weights):
+(EngineCore pid=3642)   File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/vllm/model_executor/models/utils.py", line 170, in _groupby_prefix
+(EngineCore pid=3642)     for prefix, group in itertools.groupby(weights_by_parts, key=lambda x: x[0][0]):
+(EngineCore pid=3642)   File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/vllm/model_executor/models/utils.py", line 165, in <genexpr>
+(EngineCore pid=3642)     weights_by_parts = (
+(EngineCore pid=3642)   File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/vllm/model_executor/models/utils.py", line 344, in <genexpr>
+(EngineCore pid=3642)     weights = (
+(EngineCore pid=3642)   File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/vllm/model_executor/model_loader/default_loader.py", line 286, in get_all_weights
+(EngineCore pid=3642)     yield from self._get_weights_iterator(primary_weights)
+(EngineCore pid=3642)   File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/vllm/model_executor/model_loader/default_loader.py", line 208, in _get_weights_iterator
+(EngineCore pid=3642)     hf_folder, hf_weights_files, use_safetensors = self._prepare_weights(
+(EngineCore pid=3642)   File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/vllm/model_executor/model_loader/default_loader.py", line 154, in _prepare_weights
+(EngineCore pid=3642)     hf_folder = download_weights_from_hf(
+(EngineCore pid=3642)   File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/vllm/tracing/otel.py", line 178, in sync_wrapper
+(EngineCore pid=3642)     return func(*args, **kwargs)
+(EngineCore pid=3642)   File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/vllm/model_executor/model_loader/weight_utils.py", line 556, in download_weights_from_hf
+(EngineCore pid=3642)     hf_folder = snapshot_download(
+(EngineCore pid=3642)   File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 114, in _inner_fn
+(EngineCore pid=3642)     return fn(*args, **kwargs)
+(EngineCore pid=3642)   File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/huggingface_hub/_snapshot_download.py", line 332, in snapshot_download
+(EngineCore pid=3642)     thread_map(
+(EngineCore pid=3642)   File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/tqdm/contrib/concurrent.py", line 69, in thread_map
+(EngineCore pid=3642)     return _executor_map(ThreadPoolExecutor, fn, *iterables, **tqdm_kwargs)
+(EngineCore pid=3642)   File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/tqdm/contrib/concurrent.py", line 51, in _executor_map
+(EngineCore pid=3642)     return list(tqdm_class(ex.map(fn, *iterables, chunksize=chunksize), **kwargs))
+(EngineCore pid=3642)   File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/tqdm/std.py", line 1169, in __iter__
+(EngineCore pid=3642)     for obj in iterable:
+(EngineCore pid=3642)   File "/.uv/python_install/cpython-3.10-linux-x86_64-gnu/lib/python3.10/concurrent/futures/_base.py", line 621, in result_iterator
+(EngineCore pid=3642)     yield _result_or_cancel(fs.pop())
+(EngineCore pid=3642)   File "/.uv/python_install/cpython-3.10-linux-x86_64-gnu/lib/python3.10/concurrent/futures/_base.py", line 319, in _result_or_cancel
+(EngineCore pid=3642)     return fut.result(timeout)
+(EngineCore pid=3642)   File "/.uv/python_install/cpython-3.10-linux-x86_64-gnu/lib/python3.10/concurrent/futures/_base.py", line 458, in result
+(EngineCore pid=3642)     return self.__get_result()
+(EngineCore pid=3642)   File "/.uv/python_install/cpython-3.10-linux-x86_64-gnu/lib/python3.10/concurrent/futures/_base.py", line 403, in __get_result
+(EngineCore pid=3642)     raise self._exception
+(EngineCore pid=3642)   File "/.uv/python_install/cpython-3.10-linux-x86_64-gnu/lib/python3.10/concurrent/futures/thread.py", line 58, in run
+(EngineCore pid=3642)     result = self.fn(*self.args, **self.kwargs)
+(EngineCore pid=3642)   File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/huggingface_hub/_snapshot_download.py", line 306, in _inner_hf_hub_download
+(EngineCore pid=3642)     return hf_hub_download(
+(EngineCore pid=3642)   File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 114, in _inner_fn
+(EngineCore pid=3642)     return fn(*args, **kwargs)
+(EngineCore pid=3642)   File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 1014, in hf_hub_download
+(EngineCore pid=3642)     return _hf_hub_download_to_cache_dir(
+(EngineCore pid=3642)   File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 1188, in _hf_hub_download_to_cache_dir
+(EngineCore pid=3642)     _create_symlink(blob_path, pointer_path, new_blob=True)
+(EngineCore pid=3642)   File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 738, in _create_symlink
+(EngineCore pid=3642)     os.symlink(src_rel_or_abs, abs_dst)
+(EngineCore pid=3642) FileNotFoundError: [Errno 2] No such file or directory: '../../blobs/7b142e830f43c228d109ddf6811c21339cca829a9d11dac1883d20cb238c5622' -> '/root/.cache/models--INSAIT-Institute--MamayLM-Gemma-2-9B-IT-v0.1/snapshots/c6f0a6d999c433b2a2d727e95c288255c157c303/model-00001-of-00004.safetensors'
+Traceback (most recent call last):
+  File "/.uv/python_install/cpython-3.10-linux-x86_64-gnu/lib/python3.10/runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "/.uv/python_install/cpython-3.10-linux-x86_64-gnu/lib/python3.10/runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "/workspace/MamayScope/src/services/mamay_service.py", line 54, in <module>
+    service = HookedMamayService()
+  File "/workspace/MamayScope/src/services/mamay_service.py", line 14, in __init__
+    self.model = HookedMamay(
+  File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/vllm_hook_plugins/hooked_mamay.py", line 40, in __init__
+    self.llm = HookLLM(
+  File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/vllm_hook_plugins/hook_llm.py", line 56, in __init__
+    self.llm = LLM(
+  File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/vllm/entrypoints/llm.py", line 382, in __init__
+    self.llm_engine = LLMEngine.from_engine_args(
+  File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/vllm/v1/engine/llm_engine.py", line 177, in from_engine_args
+    return cls(
+  File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/vllm/v1/engine/llm_engine.py", line 111, in __init__
+    self.engine_core = EngineCoreClient.make_client(
+  File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/vllm/v1/engine/core_client.py", line 99, in make_client
+    return SyncMPClient(vllm_config, executor_class, log_stats)
+  File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/vllm/tracing/otel.py", line 178, in sync_wrapper
+    return func(*args, **kwargs)
+  File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/vllm/v1/engine/core_client.py", line 747, in __init__
+    super().__init__(
+  File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/vllm/v1/engine/core_client.py", line 583, in __init__
+    with launch_core_engines(
+  File "/.uv/python_install/cpython-3.10-linux-x86_64-gnu/lib/python3.10/contextlib.py", line 142, in __exit__
+    next(self.gen)
+  File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/vllm/v1/engine/utils.py", line 972, in launch_core_engines
+    wait_for_engine_startup(
+  File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/vllm/v1/engine/utils.py", line 1031, in wait_for_engine_startup
+    raise RuntimeError(
+RuntimeError: Engine core initialization failed. See root cause above. Failed core proc(s): {}
+(mamay-venv) (main) root@C.33457600:/workspace/MamayScope$ cd ..
+(mamay-venv) (main) root@C.33457600:/workspace$ ls
+MamayScope
+(mamay-venv) (main) root@C.33457600:/workspace$ cd MamayScope/
+(mamay-venv) (main) root@C.33457600:/workspace/MamayScope$ cd ..
+(mamay-venv) (main) root@C.33457600:/workspace$ cd ./hf_home
+bash: cd: ./hf_home: No such file or directory
+(mamay-venv) (main) root@C.33457600:/workspace$ cd hf_home
+bash: cd: hf_home: No such file or directory
+(mamay-venv) (main) root@C.33457600:/workspace$ cd .hf_home
+(mamay-venv) (main) root@C.33457600:/workspace/.hf_home$ ls
+hub  xet
+(mamay-venv) (main) root@C.33457600:/workspace/.hf_home$ cd ..
+(mamay-venv) (main) root@C.33457600:/workspace$ cd MamayScope/
+(mamay-venv) (main) root@C.33457600:/workspace/MamayScope$ vim /workspace/MamayScope/src/services/mamay_service.py
+(mamay-venv) (main) root@C.33457600:/workspace/MamayScope$ python -m src.services.mamay_service
+INFO 03-24 16:03:05 [utils.py:233] non-default args: {'trust_remote_code': True, 'download_dir': '/workspace/.hf_home', 'dtype': torch.bfloat16, 'max_model_len': 2048, 'gpu_memory_utilization': 0.95, 'disable_log_stats': True, 'enforce_eager': True, 'worker_cls': 'vllm_hook_plugins.workers.residual_stream_worker.ResidualStreamWorker', 'model': 'INSAIT-Institute/MamayLM-Gemma-2-9B-IT-v0.1'}
+WARNING 03-24 16:03:05 [envs.py:1717] Unknown vLLM environment variable detected: VLLM_IMPORTANT_LAYERS
+WARNING 03-24 16:03:05 [envs.py:1717] Unknown vLLM environment variable detected: VLLM_HOOK_DIR
+WARNING 03-24 16:03:05 [envs.py:1717] Unknown vLLM environment variable detected: VLLM_HOOK_FLAG
+WARNING 03-24 16:03:05 [envs.py:1717] Unknown vLLM environment variable detected: VLLM_RUN_ID
+INFO 03-24 16:03:06 [model.py:533] Resolved architecture: Gemma2ForCausalLM
+INFO 03-24 16:03:06 [model.py:1582] Using max model len 2048
+INFO 03-24 16:03:06 [scheduler.py:231] Chunked prefill is enabled with max_num_batched_tokens=8192.
+INFO 03-24 16:03:06 [vllm.py:754] Asynchronous scheduling is enabled.
+WARNING 03-24 16:03:06 [vllm.py:788] Enforce eager set, disabling torch.compile and CUDAGraphs. This is equivalent to setting -cc.mode=none -cc.cudagraph_mode=none
+WARNING 03-24 16:03:06 [vllm.py:799] Inductor compilation was disabled by user settings, optimizations settings that are only active during inductor compilation will be ignored.
+INFO 03-24 16:03:06 [vllm.py:964] Cudagraph is disabled under eager mode
+INFO 03-24 16:03:06 [compilation.py:289] Enabled custom fusions: norm_quant, act_quant
+(EngineCore pid=4040) INFO 03-24 16:03:08 [core.py:103] Initializing a V1 LLM engine (v0.18.0) with config: model='INSAIT-Institute/MamayLM-Gemma-2-9B-IT-v0.1', speculative_config=None, tokenizer='INSAIT-Institute/MamayLM-Gemma-2-9B-IT-v0.1', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, tokenizer_revision=None, trust_remote_code=True, dtype=torch.bfloat16, max_seq_len=2048, download_dir='/workspace/.hf_home', load_format=auto, tensor_parallel_size=1, pipeline_parallel_size=1, data_parallel_size=1, decode_context_parallel_size=1, dcp_comm_backend=ag_rs, disable_custom_all_reduce=False, quantization=None, enforce_eager=True, enable_return_routed_experts=False, kv_cache_dtype=auto, device_config=cuda, structured_outputs_config=StructuredOutputsConfig(backend='auto', disable_any_whitespace=False, disable_additional_properties=False, reasoning_parser='', reasoning_parser_plugin='', enable_in_reasoning=False), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None, kv_cache_metrics=False, kv_cache_metrics_sample=0.01, cudagraph_metrics=False, enable_layerwise_nvtx_tracing=False, enable_mfu_metrics=False, enable_mm_processor_stats=False, enable_logging_iteration_details=False), seed=0, served_model_name=INSAIT-Institute/MamayLM-Gemma-2-9B-IT-v0.1, enable_prefix_caching=True, enable_chunked_prefill=True, pooler_config=None, compilation_config={'mode': <CompilationMode.NONE: 0>, 'debug_dump_path': None, 'cache_dir': '', 'compile_cache_save_format': 'binary', 'backend': 'inductor', 'custom_ops': ['all'], 'splitting_ops': [], 'compile_mm_encoder': False, 'compile_sizes': [], 'compile_ranges_endpoints': [8192], 'inductor_compile_config': {'enable_auto_functionalized_v2': False, 'combo_kernels': True, 'benchmark_combo_kernel': True}, 'inductor_passes': {}, 'cudagraph_mode': <CUDAGraphMode.NONE: 0>, 'cudagraph_num_of_warmups': 0, 'cudagraph_capture_sizes': [], 'cudagraph_copy_inputs': False, 'cudagraph_specialize_lora': True, 'use_inductor_graph_partition': False, 'pass_config': {'fuse_norm_quant': True, 'fuse_act_quant': True, 'fuse_attn_quant': False, 'enable_sp': False, 'fuse_gemm_comms': False, 'fuse_allreduce_rms': False}, 'max_cudagraph_capture_size': 0, 'dynamic_shapes_config': {'type': <DynamicShapesType.BACKED: 'backed'>, 'evaluate_guards': False, 'assume_32_bit_indexing': False}, 'local_cache_dir': None, 'fast_moe_cold_start': True, 'static_all_moe_layers': []}
+(EngineCore pid=4040) INFO 03-24 16:03:08 [parallel_state.py:1395] world_size=1 rank=0 local_rank=0 distributed_init_method=tcp://172.17.0.8:41123 backend=nccl
+(EngineCore pid=4040) INFO 03-24 16:03:08 [parallel_state.py:1717] rank 0 in world size 1 is assigned as DP rank 0, PP rank 0, PCP rank 0, TP rank 0, EP rank N/A, EPLB rank N/A
+(EngineCore pid=4040) INFO 03-24 16:03:09 [gpu_model_runner.py:4481] Starting to load model INSAIT-Institute/MamayLM-Gemma-2-9B-IT-v0.1...
+(EngineCore pid=4040) INFO 03-24 16:03:10 [cuda.py:317] Using FLASH_ATTN attention backend out of potential backends: ['FLASH_ATTN', 'FLASHINFER', 'TRITON_ATTN', 'FLEX_ATTENTION'].
+(EngineCore pid=4040) INFO 03-24 16:03:10 [flash_attn.py:598] Using FlashAttention version 2
+model.safetensors.index.json: 39.1kB [00:00, 97.0MB/s]
+model-00004-of-00004.safetensors: 100%|███████████████████████████████████████████████████████████████████████████████████████████| 3.67G/3.67G [01:34<00:00, 38.8MB/s]
+model-00001-of-00004.safetensors: 100%|███████████████████████████████████████████████████████████████████████████████████████████| 4.90G/4.90G [02:25<00:00, 33.7MB/s]
+model-00002-of-00004.safetensors: 100%|███████████████████████████████████████████████████████████████████████████████████████████| 4.95G/4.95G [02:27<00:00, 33.5MB/s]
+model-00003-of-00004.safetensors: 100%|███████████████████████████████████████████████████████████████████████████████████████████| 4.96G/4.96G [02:28<00:00, 33.5MB/s]
+(EngineCore pid=4040) INFO 03-24 16:05:39 [weight_utils.py:574] Time spent downloading weights for INSAIT-Institute/MamayLM-Gemma-2-9B-IT-v0.1: 148.708149 secondsMB/s]
+Loading safetensors checkpoint shards:   0% Completed | 0/4 [00:00<?, ?it/s]
+Loading safetensors checkpoint shards:  25% Completed | 1/4 [00:00<00:02,  1.49it/s]
+Loading safetensors checkpoint shards:  50% Completed | 2/4 [00:01<00:01,  1.25it/s]
+Loading safetensors checkpoint shards:  75% Completed | 3/4 [00:02<00:00,  1.18it/s]
+Loading safetensors checkpoint shards: 100% Completed | 4/4 [00:03<00:00,  1.26it/s]
+Loading safetensors checkpoint shards: 100% Completed | 4/4 [00:03<00:00,  1.26it/s]
+(EngineCore pid=4040) 
+(EngineCore pid=4040) INFO 03-24 16:05:43 [default_loader.py:384] Loading weights took 3.34 seconds
+(EngineCore pid=4040) INFO 03-24 16:05:43 [gpu_model_runner.py:4566] Model loading took 17.22 GiB memory and 153.376695 seconds
+(EngineCore pid=4040) Installed 42 residual stream hooks on layers: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41]
+(EngineCore pid=4040) Residual stream hooks installed successfully
+(EngineCore pid=4040) INFO 03-24 16:05:53 [gpu_worker.py:456] Available KV cache memory: 3.99 GiB
+(EngineCore pid=4040) INFO 03-24 16:05:53 [kv_cache_utils.py:1316] GPU KV cache size: 12,432 tokens
+(EngineCore pid=4040) INFO 03-24 16:05:53 [kv_cache_utils.py:1321] Maximum concurrency for 2,048 tokens per request: 6.05x
+(EngineCore pid=4040) INFO 03-24 16:05:53 [core.py:281] init engine (profile, create kv cache, warmup model) took 10.20 seconds
+(EngineCore pid=4040) WARNING 03-24 16:05:56 [vllm.py:788] Enforce eager set, disabling torch.compile and CUDAGraphs. This is equivalent to setting -cc.mode=none -cc.cudagraph_mode=none
+(EngineCore pid=4040) WARNING 03-24 16:05:56 [vllm.py:799] Inductor compilation was disabled by user settings, optimizations settings that are only active during inductor compilation will be ignored.
+(EngineCore pid=4040) INFO 03-24 16:05:56 [vllm.py:964] Cudagraph is disabled under eager mode
+INFO 03-24 16:05:56 [llm.py:391] Supported tasks: ['generate']
+Traceback (most recent call last):
+  File "/.uv/python_install/cpython-3.10-linux-x86_64-gnu/lib/python3.10/runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "/.uv/python_install/cpython-3.10-linux-x86_64-gnu/lib/python3.10/runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "/workspace/MamayScope/src/services/mamay_service.py", line 57, in <module>
+    activations = service.generate_activations_probing(texts)
+AttributeError: 'HookedMamayService' object has no attribute 'generate_activations_probing'. Did you mean: 'generate_activations'?
+(EngineCore pid=4040) INFO 03-24 16:05:56 [core.py:1201] Shutdown initiated (timeout=0)
+(EngineCore pid=4040) INFO 03-24 16:05:56 [core.py:1224] Shutdown complete
+ERROR 03-24 16:05:56 [core_client.py:704] Engine core proc EngineCore died unexpectedly, shutting down client.
+(mamay-venv) (main) root@C.33457600:/workspace/MamayScope$ git checkout feature/mamay-endpoint
+M       src/services/mamay_service.py
+branch 'feature/mamay-endpoint' set up to track 'origin/feature/mamay-endpoint'.
+Switched to a new branch 'feature/mamay-endpoint'
+(mamay-venv) (main) root@C.33457600:/workspace/MamayScope$ vim /workspace/MamayScope/src/services/mamay_service.py
+(mamay-venv) (main) root@C.33457600:/workspace/MamayScope$ git pull origin feature/mamay-endpoint
+Username for 'https://github.com': mechark
+Password for 'https://mechark@github.com': 
+remote: Enumerating objects: 18, done.
+remote: Counting objects: 100% (18/18), done.
+remote: Compressing objects: 100% (5/5), done.
+remote: Total 11 (delta 6), reused 11 (delta 6), pack-reused 0 (from 0)
+Unpacking objects: 100% (11/11), 7.67 KiB | 2.56 MiB/s, done.
+From https://github.com/mechark/MamayScope
+ * branch            feature/mamay-endpoint -> FETCH_HEAD
+   af02bc0..dd6dc04  feature/mamay-endpoint -> origin/feature/mamay-endpoint
+Updating af02bc0..dd6dc04
+error: Your local changes to the following files would be overwritten by merge:
+        src/services/mamay_service.py
+Please commit your changes or stash them before you merge.
+Aborting
+(mamay-venv) (main) root@C.33457600:/workspace/MamayScope$ vim /workspace/MamayScope/src/services/mamay_service.py
+(mamay-venv) (main) root@C.33457600:/workspace/MamayScope$ git pull origin feature/mamay-endpoint
+Username for 'https://github.com': mechark
+Password for 'https://mechark@github.com': 
+From https://github.com/mechark/MamayScope
+ * branch            feature/mamay-endpoint -> FETCH_HEAD
+Updating af02bc0..dd6dc04
+error: Your local changes to the following files would be overwritten by merge:
+        src/services/mamay_service.py
+Please commit your changes or stash them before you merge.
+Aborting
+(mamay-venv) (main) root@C.33457600:/workspace/MamayScope$ vim /workspace/MamayScope/src/services/mamay_service.py
+(mamay-venv) (main) root@C.33457600:/workspace/MamayScope$ python -m src.services.mamay_service
+INFO 03-24 16:11:37 [utils.py:233] non-default args: {'trust_remote_code': True, 'download_dir': '/workspace/.hf_home', 'dtype': torch.bfloat16, 'max_model_len': 2048, 'gpu_memory_utilization': 0.95, 'disable_log_stats': True, 'enforce_eager': True, 'worker_cls': 'vllm_hook_plugins.workers.residual_stream_worker.ResidualStreamWorker', 'model': 'INSAIT-Institute/MamayLM-Gemma-2-9B-IT-v0.1'}
+WARNING 03-24 16:11:37 [envs.py:1717] Unknown vLLM environment variable detected: VLLM_IMPORTANT_LAYERS
+WARNING 03-24 16:11:37 [envs.py:1717] Unknown vLLM environment variable detected: VLLM_HOOK_DIR
+WARNING 03-24 16:11:37 [envs.py:1717] Unknown vLLM environment variable detected: VLLM_HOOK_FLAG
+WARNING 03-24 16:11:37 [envs.py:1717] Unknown vLLM environment variable detected: VLLM_RUN_ID
+INFO 03-24 16:11:38 [model.py:533] Resolved architecture: Gemma2ForCausalLM
+INFO 03-24 16:11:38 [model.py:1582] Using max model len 2048
+INFO 03-24 16:11:38 [scheduler.py:231] Chunked prefill is enabled with max_num_batched_tokens=8192.
+INFO 03-24 16:11:38 [vllm.py:754] Asynchronous scheduling is enabled.
+WARNING 03-24 16:11:38 [vllm.py:788] Enforce eager set, disabling torch.compile and CUDAGraphs. This is equivalent to setting -cc.mode=none -cc.cudagraph_mode=none
+WARNING 03-24 16:11:38 [vllm.py:799] Inductor compilation was disabled by user settings, optimizations settings that are only active during inductor compilation will be ignored.
+INFO 03-24 16:11:38 [vllm.py:964] Cudagraph is disabled under eager mode
+INFO 03-24 16:11:38 [compilation.py:289] Enabled custom fusions: norm_quant, act_quant
+(EngineCore pid=4492) INFO 03-24 16:11:40 [core.py:103] Initializing a V1 LLM engine (v0.18.0) with config: model='INSAIT-Institute/MamayLM-Gemma-2-9B-IT-v0.1', speculative_config=None, tokenizer='INSAIT-Institute/MamayLM-Gemma-2-9B-IT-v0.1', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, tokenizer_revision=None, trust_remote_code=True, dtype=torch.bfloat16, max_seq_len=2048, download_dir='/workspace/.hf_home', load_format=auto, tensor_parallel_size=1, pipeline_parallel_size=1, data_parallel_size=1, decode_context_parallel_size=1, dcp_comm_backend=ag_rs, disable_custom_all_reduce=False, quantization=None, enforce_eager=True, enable_return_routed_experts=False, kv_cache_dtype=auto, device_config=cuda, structured_outputs_config=StructuredOutputsConfig(backend='auto', disable_any_whitespace=False, disable_additional_properties=False, reasoning_parser='', reasoning_parser_plugin='', enable_in_reasoning=False), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None, kv_cache_metrics=False, kv_cache_metrics_sample=0.01, cudagraph_metrics=False, enable_layerwise_nvtx_tracing=False, enable_mfu_metrics=False, enable_mm_processor_stats=False, enable_logging_iteration_details=False), seed=0, served_model_name=INSAIT-Institute/MamayLM-Gemma-2-9B-IT-v0.1, enable_prefix_caching=True, enable_chunked_prefill=True, pooler_config=None, compilation_config={'mode': <CompilationMode.NONE: 0>, 'debug_dump_path': None, 'cache_dir': '', 'compile_cache_save_format': 'binary', 'backend': 'inductor', 'custom_ops': ['all'], 'splitting_ops': [], 'compile_mm_encoder': False, 'compile_sizes': [], 'compile_ranges_endpoints': [8192], 'inductor_compile_config': {'enable_auto_functionalized_v2': False, 'combo_kernels': True, 'benchmark_combo_kernel': True}, 'inductor_passes': {}, 'cudagraph_mode': <CUDAGraphMode.NONE: 0>, 'cudagraph_num_of_warmups': 0, 'cudagraph_capture_sizes': [], 'cudagraph_copy_inputs': False, 'cudagraph_specialize_lora': True, 'use_inductor_graph_partition': False, 'pass_config': {'fuse_norm_quant': True, 'fuse_act_quant': True, 'fuse_attn_quant': False, 'enable_sp': False, 'fuse_gemm_comms': False, 'fuse_allreduce_rms': False}, 'max_cudagraph_capture_size': 0, 'dynamic_shapes_config': {'type': <DynamicShapesType.BACKED: 'backed'>, 'evaluate_guards': False, 'assume_32_bit_indexing': False}, 'local_cache_dir': None, 'fast_moe_cold_start': True, 'static_all_moe_layers': []}
+(EngineCore pid=4492) INFO 03-24 16:11:40 [parallel_state.py:1395] world_size=1 rank=0 local_rank=0 distributed_init_method=tcp://172.17.0.8:43133 backend=nccl
+(EngineCore pid=4492) INFO 03-24 16:11:40 [parallel_state.py:1717] rank 0 in world size 1 is assigned as DP rank 0, PP rank 0, PCP rank 0, TP rank 0, EP rank N/A, EPLB rank N/A
+(EngineCore pid=4492) INFO 03-24 16:11:41 [gpu_model_runner.py:4481] Starting to load model INSAIT-Institute/MamayLM-Gemma-2-9B-IT-v0.1...
+(EngineCore pid=4492) INFO 03-24 16:11:41 [cuda.py:317] Using FLASH_ATTN attention backend out of potential backends: ['FLASH_ATTN', 'FLASHINFER', 'TRITON_ATTN', 'FLEX_ATTENTION'].
+(EngineCore pid=4492) INFO 03-24 16:11:41 [flash_attn.py:598] Using FlashAttention version 2
+Loading safetensors checkpoint shards:   0% Completed | 0/4 [00:00<?, ?it/s]
+Loading safetensors checkpoint shards:  25% Completed | 1/4 [00:00<00:02,  1.43it/s]
+Loading safetensors checkpoint shards:  50% Completed | 2/4 [00:01<00:01,  1.00it/s]
+Loading safetensors checkpoint shards:  75% Completed | 3/4 [00:03<00:01,  1.09s/it]
+Loading safetensors checkpoint shards: 100% Completed | 4/4 [00:04<00:00,  1.06s/it]
+Loading safetensors checkpoint shards: 100% Completed | 4/4 [00:04<00:00,  1.03s/it]
+(EngineCore pid=4492) 
+(EngineCore pid=4492) INFO 03-24 16:11:47 [default_loader.py:384] Loading weights took 4.47 seconds
+(EngineCore pid=4492) INFO 03-24 16:11:47 [gpu_model_runner.py:4566] Model loading took 17.22 GiB memory and 5.840463 seconds
+(EngineCore pid=4492) Installed 42 residual stream hooks on layers: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41]
+(EngineCore pid=4492) Residual stream hooks installed successfully
+(EngineCore pid=4492) INFO 03-24 16:11:50 [gpu_worker.py:456] Available KV cache memory: 3.99 GiB
+(EngineCore pid=4492) INFO 03-24 16:11:50 [kv_cache_utils.py:1316] GPU KV cache size: 12,432 tokens
+(EngineCore pid=4492) INFO 03-24 16:11:50 [kv_cache_utils.py:1321] Maximum concurrency for 2,048 tokens per request: 6.05x
+(EngineCore pid=4492) INFO 03-24 16:11:50 [core.py:281] init engine (profile, create kv cache, warmup model) took 2.47 seconds
+(EngineCore pid=4492) WARNING 03-24 16:11:52 [vllm.py:788] Enforce eager set, disabling torch.compile and CUDAGraphs. This is equivalent to setting -cc.mode=none -cc.cudagraph_mode=none
+(EngineCore pid=4492) WARNING 03-24 16:11:52 [vllm.py:799] Inductor compilation was disabled by user settings, optimizations settings that are only active during inductor compilation will be ignored.
+(EngineCore pid=4492) INFO 03-24 16:11:52 [vllm.py:964] Cudagraph is disabled under eager mode
+INFO 03-24 16:11:52 [llm.py:391] Supported tasks: ['generate']
+Logged run ID.
+Created hook flag.
+Rendering prompts: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 54.56it/s]
+Processed prompts: 100%|███████████████████████████████████████████████████████████| 1/1 [00:00<00:00,  2.17it/s, est. speed input: 17.35 toks/s, output: 13.01 toks/s]
+Hooks deactivated.
+Logged run ID.
+Created hook flag.
+Rendering prompts: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 1648.70it/s]
+Processed prompts: 100%|████████████████████████████████████████████████████████████| 1/1 [00:01<00:00,  1.37s/it, est. speed input: 9.50 toks/s, output: 18.27 toks/s]
+Traceback (most recent call last):
+  File "/.uv/python_install/cpython-3.10-linux-x86_64-gnu/lib/python3.10/runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "/.uv/python_install/cpython-3.10-linux-x86_64-gnu/lib/python3.10/runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "/workspace/MamayScope/src/services/mamay_service.py", line 57, in <module>
+    activations = service.generate_activations(texts)
+  File "/workspace/MamayScope/src/services/mamay_service.py", line 39, in generate_activations
+    _, activations_dict = self.model.generate(text) # activations is Dict[layer_idx, Tensor[hidden_size]]
+  File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/vllm_hook_plugins/hooked_mamay.py", line 89, in generate
+    activations = self._load_activations(run_id)
+  File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/vllm_hook_plugins/hooked_mamay.py", line 107, in _load_activations
+    cache = torch.load(residual_files[0], map_location="cpu")
+  File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/torch/serialization.py", line 1572, in load
+    raise pickle.UnpicklingError(_get_wo_message(str(e))) from None
+_pickle.UnpicklingError: Weights only load failed. In PyTorch 2.6, we changed the default value of the `weights_only` argument in `torch.load` from `False` to `True`. Re-running `torch.load` with `weights_only` set to `False` will likely succeed, but it can result in arbitrary code execution. Do it only if you got the file from a trusted source.
+Please file an issue with the following so that we can make `weights_only=True` compatible with your use case: WeightsUnpickler error: 
+
+Unsupported operand 80
+
+Check the documentation of torch.load to learn more about types accepted by default with weights_only https://pytorch.org/docs/stable/generated/torch.load.html.
+(EngineCore pid=4492) INFO 03-24 16:11:54 [core.py:1201] Shutdown initiated (timeout=0)
+(EngineCore pid=4492) INFO 03-24 16:11:54 [core.py:1224] Shutdown complete
+ERROR 03-24 16:11:54 [core_client.py:704] Engine core proc EngineCore died unexpectedly, shutting down client.
+(mamay-venv) (main) root@C.33457600:/workspace/MamayScope$ vim /workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/vllm_hook_plugins/hooked_mamay.py
+(mamay-venv) (main) root@C.33457600:/workspace/MamayScope$ python -m src.services.mamay_service
+INFO 03-24 16:13:51 [utils.py:233] non-default args: {'trust_remote_code': True, 'download_dir': '/workspace/.hf_home', 'dtype': torch.bfloat16, 'max_model_len': 2048, 'gpu_memory_utilization': 0.95, 'disable_log_stats': True, 'enforce_eager': True, 'worker_cls': 'vllm_hook_plugins.workers.residual_stream_worker.ResidualStreamWorker', 'model': 'INSAIT-Institute/MamayLM-Gemma-2-9B-IT-v0.1'}
+WARNING 03-24 16:13:51 [envs.py:1717] Unknown vLLM environment variable detected: VLLM_IMPORTANT_LAYERS
+WARNING 03-24 16:13:51 [envs.py:1717] Unknown vLLM environment variable detected: VLLM_HOOK_DIR
+WARNING 03-24 16:13:51 [envs.py:1717] Unknown vLLM environment variable detected: VLLM_HOOK_FLAG
+WARNING 03-24 16:13:51 [envs.py:1717] Unknown vLLM environment variable detected: VLLM_RUN_ID
+INFO 03-24 16:13:52 [model.py:533] Resolved architecture: Gemma2ForCausalLM
+INFO 03-24 16:13:52 [model.py:1582] Using max model len 2048
+INFO 03-24 16:13:52 [scheduler.py:231] Chunked prefill is enabled with max_num_batched_tokens=8192.
+INFO 03-24 16:13:52 [vllm.py:754] Asynchronous scheduling is enabled.
+WARNING 03-24 16:13:52 [vllm.py:788] Enforce eager set, disabling torch.compile and CUDAGraphs. This is equivalent to setting -cc.mode=none -cc.cudagraph_mode=none
+WARNING 03-24 16:13:52 [vllm.py:799] Inductor compilation was disabled by user settings, optimizations settings that are only active during inductor compilation will be ignored.
+INFO 03-24 16:13:52 [vllm.py:964] Cudagraph is disabled under eager mode
+INFO 03-24 16:13:52 [compilation.py:289] Enabled custom fusions: norm_quant, act_quant
+(EngineCore pid=4853) INFO 03-24 16:13:55 [core.py:103] Initializing a V1 LLM engine (v0.18.0) with config: model='INSAIT-Institute/MamayLM-Gemma-2-9B-IT-v0.1', speculative_config=None, tokenizer='INSAIT-Institute/MamayLM-Gemma-2-9B-IT-v0.1', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, tokenizer_revision=None, trust_remote_code=True, dtype=torch.bfloat16, max_seq_len=2048, download_dir='/workspace/.hf_home', load_format=auto, tensor_parallel_size=1, pipeline_parallel_size=1, data_parallel_size=1, decode_context_parallel_size=1, dcp_comm_backend=ag_rs, disable_custom_all_reduce=False, quantization=None, enforce_eager=True, enable_return_routed_experts=False, kv_cache_dtype=auto, device_config=cuda, structured_outputs_config=StructuredOutputsConfig(backend='auto', disable_any_whitespace=False, disable_additional_properties=False, reasoning_parser='', reasoning_parser_plugin='', enable_in_reasoning=False), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None, kv_cache_metrics=False, kv_cache_metrics_sample=0.01, cudagraph_metrics=False, enable_layerwise_nvtx_tracing=False, enable_mfu_metrics=False, enable_mm_processor_stats=False, enable_logging_iteration_details=False), seed=0, served_model_name=INSAIT-Institute/MamayLM-Gemma-2-9B-IT-v0.1, enable_prefix_caching=True, enable_chunked_prefill=True, pooler_config=None, compilation_config={'mode': <CompilationMode.NONE: 0>, 'debug_dump_path': None, 'cache_dir': '', 'compile_cache_save_format': 'binary', 'backend': 'inductor', 'custom_ops': ['all'], 'splitting_ops': [], 'compile_mm_encoder': False, 'compile_sizes': [], 'compile_ranges_endpoints': [8192], 'inductor_compile_config': {'enable_auto_functionalized_v2': False, 'combo_kernels': True, 'benchmark_combo_kernel': True}, 'inductor_passes': {}, 'cudagraph_mode': <CUDAGraphMode.NONE: 0>, 'cudagraph_num_of_warmups': 0, 'cudagraph_capture_sizes': [], 'cudagraph_copy_inputs': False, 'cudagraph_specialize_lora': True, 'use_inductor_graph_partition': False, 'pass_config': {'fuse_norm_quant': True, 'fuse_act_quant': True, 'fuse_attn_quant': False, 'enable_sp': False, 'fuse_gemm_comms': False, 'fuse_allreduce_rms': False}, 'max_cudagraph_capture_size': 0, 'dynamic_shapes_config': {'type': <DynamicShapesType.BACKED: 'backed'>, 'evaluate_guards': False, 'assume_32_bit_indexing': False}, 'local_cache_dir': None, 'fast_moe_cold_start': True, 'static_all_moe_layers': []}
+(EngineCore pid=4853) INFO 03-24 16:13:55 [parallel_state.py:1395] world_size=1 rank=0 local_rank=0 distributed_init_method=tcp://172.17.0.8:52315 backend=nccl
+(EngineCore pid=4853) INFO 03-24 16:13:55 [parallel_state.py:1717] rank 0 in world size 1 is assigned as DP rank 0, PP rank 0, PCP rank 0, TP rank 0, EP rank N/A, EPLB rank N/A
+(EngineCore pid=4853) INFO 03-24 16:13:56 [gpu_model_runner.py:4481] Starting to load model INSAIT-Institute/MamayLM-Gemma-2-9B-IT-v0.1...
+(EngineCore pid=4853) INFO 03-24 16:13:56 [cuda.py:317] Using FLASH_ATTN attention backend out of potential backends: ['FLASH_ATTN', 'FLASHINFER', 'TRITON_ATTN', 'FLEX_ATTENTION'].
+(EngineCore pid=4853) INFO 03-24 16:13:56 [flash_attn.py:598] Using FlashAttention version 2
+Loading safetensors checkpoint shards:   0% Completed | 0/4 [00:00<?, ?it/s]
+Loading safetensors checkpoint shards:  25% Completed | 1/4 [00:00<00:02,  1.45it/s]
+Loading safetensors checkpoint shards:  50% Completed | 2/4 [00:01<00:01,  1.18it/s]
+Loading safetensors checkpoint shards:  75% Completed | 3/4 [00:02<00:00,  1.12it/s]
+Loading safetensors checkpoint shards: 100% Completed | 4/4 [00:03<00:00,  1.20it/s]
+Loading safetensors checkpoint shards: 100% Completed | 4/4 [00:03<00:00,  1.20it/s]
+(EngineCore pid=4853) 
+(EngineCore pid=4853) INFO 03-24 16:14:06 [default_loader.py:384] Loading weights took 3.50 seconds
+(EngineCore pid=4853) INFO 03-24 16:14:06 [gpu_model_runner.py:4566] Model loading took 17.22 GiB memory and 10.111841 seconds
+(EngineCore pid=4853) Installed 42 residual stream hooks on layers: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41]
+(EngineCore pid=4853) Residual stream hooks installed successfully
+(EngineCore pid=4853) INFO 03-24 16:14:09 [gpu_worker.py:456] Available KV cache memory: 3.99 GiB
+(EngineCore pid=4853) INFO 03-24 16:14:09 [kv_cache_utils.py:1316] GPU KV cache size: 12,432 tokens
+(EngineCore pid=4853) INFO 03-24 16:14:09 [kv_cache_utils.py:1321] Maximum concurrency for 2,048 tokens per request: 6.05x
+(EngineCore pid=4853) INFO 03-24 16:14:09 [core.py:281] init engine (profile, create kv cache, warmup model) took 2.46 seconds
+(EngineCore pid=4853) WARNING 03-24 16:14:11 [vllm.py:788] Enforce eager set, disabling torch.compile and CUDAGraphs. This is equivalent to setting -cc.mode=none -cc.cudagraph_mode=none
+(EngineCore pid=4853) WARNING 03-24 16:14:11 [vllm.py:799] Inductor compilation was disabled by user settings, optimizations settings that are only active during inductor compilation will be ignored.
+(EngineCore pid=4853) INFO 03-24 16:14:11 [vllm.py:964] Cudagraph is disabled under eager mode
+INFO 03-24 16:14:11 [llm.py:391] Supported tasks: ['generate']
+Logged run ID.
+Created hook flag.
+Rendering prompts: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 38.43it/s]
+Processed prompts: 100%|███████████████████████████████████████████████████████████| 1/1 [00:00<00:00,  2.55it/s, est. speed input: 20.41 toks/s, output: 15.30 toks/s]
+Hooks deactivated.
+Logged run ID.
+Created hook flag.
+Rendering prompts: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 1677.72it/s]
+Processed prompts: 100%|████████████████████████████████████████████████████████████| 1/1 [00:01<00:00,  1.36s/it, est. speed input: 9.59 toks/s, output: 18.44 toks/s]
+Traceback (most recent call last):
+  File "/.uv/python_install/cpython-3.10-linux-x86_64-gnu/lib/python3.10/runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "/.uv/python_install/cpython-3.10-linux-x86_64-gnu/lib/python3.10/runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "/workspace/MamayScope/src/services/mamay_service.py", line 57, in <module>
+    activations = service.generate_activations(texts)
+  File "/workspace/MamayScope/src/services/mamay_service.py", line 39, in generate_activations
+    _, activations_dict = self.model.generate(text) # activations is Dict[layer_idx, Tensor[hidden_size]]
+  File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/vllm_hook_plugins/hooked_mamay.py", line 89, in generate
+    activations = self._load_activations(run_id)
+  File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/vllm_hook_plugins/hooked_mamay.py", line 107, in _load_activations
+    cache = torch.load(residual_files[0], map_location="cpu", weights_only=False)
+  File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/torch/serialization.py", line 1573, in load
+    return _legacy_load(
+  File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/torch/serialization.py", line 1822, in _legacy_load
+    magic_number = pickle_module.load(f, **pickle_load_args)
+_pickle.UnpicklingError: A load persistent id instruction was encountered,
+but no persistent_load function was specified.
+(EngineCore pid=4853) INFO 03-24 16:14:13 [core.py:1201] Shutdown initiated (timeout=0)
+(EngineCore pid=4853) INFO 03-24 16:14:13 [core.py:1224] Shutdown complete
+ERROR 03-24 16:14:13 [core_client.py:704] Engine core proc EngineCore died unexpectedly, shutting down client.
+(mamay-venv) (main) root@C.33457600:/workspace/MamayScope$ find /workspace -name "*.pt"
+/workspace/.hf_home/_v1_qk_peeks/18b3dc06-d5bf-4760-a7c4-9769cea2cce9/tp0/residual.pt
+/workspace/.hf_home/_v1_qk_peeks/333a4edd-4bec-4c52-b502-cedc722626f9/tp0/residual.pt
+/workspace/.hf_home/_v1_qk_peeks/4b5e989d-c183-453e-817f-84f3f0d972d2/tp0/residual.pt
+/workspace/.hf_home/_v1_qk_peeks/a2e925c9-b24f-473d-844a-d7e33b7fd3d9/tp0/residual.pt
+(mamay-venv) (main) root@C.33457600:/workspace/MamayScope$ rm -f /workspace/.hf_home/*.pt
+(mamay-venv) (main) root@C.33457600:/workspace/MamayScope$ find /workspace -name "*.pt"
+/workspace/.hf_home/_v1_qk_peeks/18b3dc06-d5bf-4760-a7c4-9769cea2cce9/tp0/residual.pt
+/workspace/.hf_home/_v1_qk_peeks/333a4edd-4bec-4c52-b502-cedc722626f9/tp0/residual.pt
+/workspace/.hf_home/_v1_qk_peeks/4b5e989d-c183-453e-817f-84f3f0d972d2/tp0/residual.pt
+/workspace/.hf_home/_v1_qk_peeks/a2e925c9-b24f-473d-844a-d7e33b7fd3d9/tp0/residual.pt
+(mamay-venv) (main) root@C.33457600:/workspace/MamayScope$ rm /workspace/.hf_home/_v1_qk_peeks/18b3dc06-d5bf-4760-a7c4-9769cea2cce9/tp0/residual.pt
+(mamay-venv) (main) root@C.33457600:/workspace/MamayScope$ rm /workspace/.hf_home/_v1_qk_peeks/333a4edd-4bec-4c52-b502-cedc722626f9/tp0/residual.pt
+(mamay-venv) (main) root@C.33457600:/workspace/MamayScope$ rm /workspace/.hf_home/_v1_qk_peeks/a2e925c9-b24f-473d-844a-d7e33b7fd3d9/tp0/residual.pt
+(mamay-venv) (main) root@C.33457600:/workspace/MamayScope$ find /workspace -name "*.pt"
+/workspace/.hf_home/_v1_qk_peeks/4b5e989d-c183-453e-817f-84f3f0d972d2/tp0/residual.pt
+(mamay-venv) (main) root@C.33457600:/workspace/MamayScope$ rm /workspace/.hf_home/_v1_qk_peeks/4b5e989d-c183-453e-817f-84f3f0d972d2/tp0/residual.pt
+(mamay-venv) (main) root@C.33457600:/workspace/MamayScope$ find /workspace -name "*.pt"
+(mamay-venv) (main) root@C.33457600:/workspace/MamayScope$ python -m src.services.mamay_service
+INFO 03-24 16:18:35 [utils.py:233] non-default args: {'trust_remote_code': True, 'download_dir': '/workspace/.hf_home', 'dtype': torch.bfloat16, 'max_model_len': 2048, 'gpu_memory_utilization': 0.95, 'disable_log_stats': True, 'enforce_eager': True, 'worker_cls': 'vllm_hook_plugins.workers.residual_stream_worker.ResidualStreamWorker', 'model': 'INSAIT-Institute/MamayLM-Gemma-2-9B-IT-v0.1'}
+WARNING 03-24 16:18:35 [envs.py:1717] Unknown vLLM environment variable detected: VLLM_IMPORTANT_LAYERS
+WARNING 03-24 16:18:35 [envs.py:1717] Unknown vLLM environment variable detected: VLLM_HOOK_DIR
+WARNING 03-24 16:18:35 [envs.py:1717] Unknown vLLM environment variable detected: VLLM_HOOK_FLAG
+WARNING 03-24 16:18:35 [envs.py:1717] Unknown vLLM environment variable detected: VLLM_RUN_ID
+INFO 03-24 16:18:36 [model.py:533] Resolved architecture: Gemma2ForCausalLM
+INFO 03-24 16:18:36 [model.py:1582] Using max model len 2048
+INFO 03-24 16:18:36 [scheduler.py:231] Chunked prefill is enabled with max_num_batched_tokens=8192.
+INFO 03-24 16:18:36 [vllm.py:754] Asynchronous scheduling is enabled.
+WARNING 03-24 16:18:36 [vllm.py:788] Enforce eager set, disabling torch.compile and CUDAGraphs. This is equivalent to setting -cc.mode=none -cc.cudagraph_mode=none
+WARNING 03-24 16:18:36 [vllm.py:799] Inductor compilation was disabled by user settings, optimizations settings that are only active during inductor compilation will be ignored.
+INFO 03-24 16:18:36 [vllm.py:964] Cudagraph is disabled under eager mode
+INFO 03-24 16:18:36 [compilation.py:289] Enabled custom fusions: norm_quant, act_quant
+(EngineCore pid=5233) INFO 03-24 16:18:38 [core.py:103] Initializing a V1 LLM engine (v0.18.0) with config: model='INSAIT-Institute/MamayLM-Gemma-2-9B-IT-v0.1', speculative_config=None, tokenizer='INSAIT-Institute/MamayLM-Gemma-2-9B-IT-v0.1', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, tokenizer_revision=None, trust_remote_code=True, dtype=torch.bfloat16, max_seq_len=2048, download_dir='/workspace/.hf_home', load_format=auto, tensor_parallel_size=1, pipeline_parallel_size=1, data_parallel_size=1, decode_context_parallel_size=1, dcp_comm_backend=ag_rs, disable_custom_all_reduce=False, quantization=None, enforce_eager=True, enable_return_routed_experts=False, kv_cache_dtype=auto, device_config=cuda, structured_outputs_config=StructuredOutputsConfig(backend='auto', disable_any_whitespace=False, disable_additional_properties=False, reasoning_parser='', reasoning_parser_plugin='', enable_in_reasoning=False), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None, kv_cache_metrics=False, kv_cache_metrics_sample=0.01, cudagraph_metrics=False, enable_layerwise_nvtx_tracing=False, enable_mfu_metrics=False, enable_mm_processor_stats=False, enable_logging_iteration_details=False), seed=0, served_model_name=INSAIT-Institute/MamayLM-Gemma-2-9B-IT-v0.1, enable_prefix_caching=True, enable_chunked_prefill=True, pooler_config=None, compilation_config={'mode': <CompilationMode.NONE: 0>, 'debug_dump_path': None, 'cache_dir': '', 'compile_cache_save_format': 'binary', 'backend': 'inductor', 'custom_ops': ['all'], 'splitting_ops': [], 'compile_mm_encoder': False, 'compile_sizes': [], 'compile_ranges_endpoints': [8192], 'inductor_compile_config': {'enable_auto_functionalized_v2': False, 'combo_kernels': True, 'benchmark_combo_kernel': True}, 'inductor_passes': {}, 'cudagraph_mode': <CUDAGraphMode.NONE: 0>, 'cudagraph_num_of_warmups': 0, 'cudagraph_capture_sizes': [], 'cudagraph_copy_inputs': False, 'cudagraph_specialize_lora': True, 'use_inductor_graph_partition': False, 'pass_config': {'fuse_norm_quant': True, 'fuse_act_quant': True, 'fuse_attn_quant': False, 'enable_sp': False, 'fuse_gemm_comms': False, 'fuse_allreduce_rms': False}, 'max_cudagraph_capture_size': 0, 'dynamic_shapes_config': {'type': <DynamicShapesType.BACKED: 'backed'>, 'evaluate_guards': False, 'assume_32_bit_indexing': False}, 'local_cache_dir': None, 'fast_moe_cold_start': True, 'static_all_moe_layers': []}
+(EngineCore pid=5233) INFO 03-24 16:18:38 [parallel_state.py:1395] world_size=1 rank=0 local_rank=0 distributed_init_method=tcp://172.17.0.8:36827 backend=nccl
+(EngineCore pid=5233) INFO 03-24 16:18:38 [parallel_state.py:1717] rank 0 in world size 1 is assigned as DP rank 0, PP rank 0, PCP rank 0, TP rank 0, EP rank N/A, EPLB rank N/A
+(EngineCore pid=5233) INFO 03-24 16:18:39 [gpu_model_runner.py:4481] Starting to load model INSAIT-Institute/MamayLM-Gemma-2-9B-IT-v0.1...
+(EngineCore pid=5233) INFO 03-24 16:18:40 [cuda.py:317] Using FLASH_ATTN attention backend out of potential backends: ['FLASH_ATTN', 'FLASHINFER', 'TRITON_ATTN', 'FLEX_ATTENTION'].
+(EngineCore pid=5233) INFO 03-24 16:18:40 [flash_attn.py:598] Using FlashAttention version 2
+Loading safetensors checkpoint shards:   0% Completed | 0/4 [00:00<?, ?it/s]
+Loading safetensors checkpoint shards:  25% Completed | 1/4 [00:00<00:02,  1.46it/s]
+Loading safetensors checkpoint shards:  50% Completed | 2/4 [00:01<00:01,  1.22it/s]
+Loading safetensors checkpoint shards:  75% Completed | 3/4 [00:02<00:00,  1.16it/s]
+Loading safetensors checkpoint shards: 100% Completed | 4/4 [00:03<00:00,  1.23it/s]
+Loading safetensors checkpoint shards: 100% Completed | 4/4 [00:03<00:00,  1.23it/s]
+(EngineCore pid=5233) 
+(EngineCore pid=5233) INFO 03-24 16:18:44 [default_loader.py:384] Loading weights took 3.40 seconds
+(EngineCore pid=5233) INFO 03-24 16:18:44 [gpu_model_runner.py:4566] Model loading took 17.22 GiB memory and 4.763784 seconds
+(EngineCore pid=5233) Installed 42 residual stream hooks on layers: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41]
+(EngineCore pid=5233) Residual stream hooks installed successfully
+(EngineCore pid=5233) INFO 03-24 16:18:47 [gpu_worker.py:456] Available KV cache memory: 3.99 GiB
+(EngineCore pid=5233) INFO 03-24 16:18:47 [kv_cache_utils.py:1316] GPU KV cache size: 12,432 tokens
+(EngineCore pid=5233) INFO 03-24 16:18:47 [kv_cache_utils.py:1321] Maximum concurrency for 2,048 tokens per request: 6.05x
+(EngineCore pid=5233) INFO 03-24 16:18:47 [core.py:281] init engine (profile, create kv cache, warmup model) took 2.52 seconds
+(EngineCore pid=5233) WARNING 03-24 16:18:49 [vllm.py:788] Enforce eager set, disabling torch.compile and CUDAGraphs. This is equivalent to setting -cc.mode=none -cc.cudagraph_mode=none
+(EngineCore pid=5233) WARNING 03-24 16:18:49 [vllm.py:799] Inductor compilation was disabled by user settings, optimizations settings that are only active during inductor compilation will be ignored.
+(EngineCore pid=5233) INFO 03-24 16:18:49 [vllm.py:964] Cudagraph is disabled under eager mode
+INFO 03-24 16:18:54 [llm.py:391] Supported tasks: ['generate']
+Logged run ID.
+Created hook flag.
+Rendering prompts: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 46.70it/s]
+Processed prompts: 100%|███████████████████████████████████████████████████████████| 1/1 [00:00<00:00,  2.36it/s, est. speed input: 18.90 toks/s, output: 14.18 toks/s]
+Hooks deactivated.
+Logged run ID.
+Created hook flag.
+Rendering prompts: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 1566.79it/s]
+Processed prompts: 100%|████████████████████████████████████████████████████████████| 1/1 [00:01<00:00,  1.39s/it, est. speed input: 9.36 toks/s, output: 18.00 toks/s]
+Traceback (most recent call last):
+  File "/.uv/python_install/cpython-3.10-linux-x86_64-gnu/lib/python3.10/runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "/.uv/python_install/cpython-3.10-linux-x86_64-gnu/lib/python3.10/runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "/workspace/MamayScope/src/services/mamay_service.py", line 57, in <module>
+    activations = service.generate_activations(texts)
+  File "/workspace/MamayScope/src/services/mamay_service.py", line 39, in generate_activations
+    _, activations_dict = self.model.generate(text) # activations is Dict[layer_idx, Tensor[hidden_size]]
+  File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/vllm_hook_plugins/hooked_mamay.py", line 89, in generate
+    activations = self._load_activations(run_id)
+  File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/vllm_hook_plugins/hooked_mamay.py", line 107, in _load_activations
+    cache = torch.load(residual_files[0], map_location="cpu", weights_only=False)
+  File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/torch/serialization.py", line 1573, in load
+    return _legacy_load(
+  File "/workspace/MamayScope/mamay-venv/lib/python3.10/site-packages/torch/serialization.py", line 1822, in _legacy_load
+    magic_number = pickle_module.load(f, **pickle_load_args)
+EOFError: Ran out of input
+(EngineCore pid=5233) INFO 03-24 16:18:56 [core.py:1201] Shutdown initiated (timeout=0)
+(EngineCore pid=5233) INFO 03-24 16:18:56 [core.py:1224] Shutdown complete
+ERROR 03-24 16:18:56 [core_client.py:704] Engine core proc EngineCore died unexpectedly, shutting down client.
+(mamay-venv) (main) root@C.33457600:/workspace/MamayScope$ uv lock --upgrade
+Using CPython 3.13.12
+Resolved 135 packages in 5.42s
+(mamay-venv) (main) root@C.33457600:/workspace/MamayScope$ uv sync
+warning: `VIRTUAL_ENV=mamay-venv` does not match the project environment path `.venv` and will be ignored; use `--active` to target the active environment instead
+Using CPython 3.13.12
+Creating virtual environment at: .venv
+Resolved 135 packages in 1ms
+⠼ Preparing packages... (0/132)
+⠸ Preparing packages... (0/132)
+⠼ Preparing packages... (0/132)
+⠴ Preparing packages... (0/132)
+⠦ Preparing packages... (0/132)
+⠧ Preparing packages... (0/132)
+⠇ Preparing packages... (0/132)
+⠙ Preparing packages... (0/132)
+⠸ Preparing packages... (0/132)
+⠦ Preparing packages... (0/132)
+⠙ Preparing packages... (0/132)
+⠙ Preparing packages... (0/132)
+⠹ Preparing packages... (0/132)
+⠹ Preparing packages... (0/132)
+⠹ Preparing packages... (0/132)
+⠸ Preparing packages... (0/132)
+⠸ Preparing packages... (0/132)
+⠴ Preparing packages... (0/132)
+⠴ Preparing packages... (0/132)
+⠦ Preparing packages... (0/132)
+⠦ Preparing packages... (0/132)
+⠋ Preparing packages... (0/132)
+⠋ Preparing packages... (0/132)
+⠙ Preparing packages... (0/132)
+⠹ Preparing packages... (0/132)
+⠸ Preparing packages... (0/132)
+⠸ Preparing packages... (0/132)
+⠼ Preparing packages... (0/132)
+⠴ Preparing packages... (0/132)
+⠴ Preparing packages... (0/132)
+⠦ Preparing packages... (0/132)
+⠦ Preparing packages... (0/132)
+⠧ Preparing packages... (0/132)
+⠇ Preparing packages... (0/132)
+⠇ Preparing packages... (0/132)
+⠇ Preparing packages... (0/132)
+⠋ Preparing packages... (0/132)
+⠋ Preparing packages... (0/132)
+⠙ Preparing packages... (0/132)
+⠙ Preparing packages... (0/132)
+⠹ Preparing packages... (0/132)
+⠹ Preparing packages... (0/132)
+⠹ Preparing packages... (0/132)
+⠸ Preparing packages... (0/132)
+⠼ Preparing packages... (0/132)
+⠼ Preparing packages... (0/132)
+⠴ Preparing packages... (0/132)
+⠦ Preparing packages... (0/132)
+⠧ Preparing packages... (0/132)
+⠇ Preparing packages... (0/132)
+⠙ Preparing packages... (0/132)
+⠸ Preparing packages... (0/132)
+⠼ Preparing packages... (0/132)
+⠴ Preparing packages... (0/132)
+⠧ Preparing packages... (0/132)
+⠇ Preparing packages... (0/132)
+⠋ Preparing packages... (0/132)
+⠸ Preparing packages... (0/132)
+⠴ Preparing packages... (0/132)
+⠦ Preparing packages... (0/132)
+⠦ Preparing packages... (0/132)
+⠧ Preparing packages... (0/132)
+⠇ Preparing packages... (0/132)
+⠋ Preparing packages... (0/132)
+⠋ Preparing packages... (0/132)
+⠙ Preparing packages... (0/132)
+⠙ Preparing packages... (0/132)
+⠹ Preparing packages... (0/132)
+⠹ Preparing packages... (0/132)
+⠸ Preparing packages... (0/132)
+⠼ Preparing packages... (0/132)
+⠴ Preparing packages... (0/132)
+⠴ Preparing packages... (0/132)
+⠧ Preparing packages... (0/132)
+⠧ Preparing packages... (0/132)
+⠧ Preparing packages... (0/132)
+⠇ Preparing packages... (0/132)
+⠙ Preparing packages... (0/132)
+⠙ Preparing packages... (0/132)
+⠹ Preparing packages... (0/132)
+⠸ Preparing packages... (0/132)
+⠼ Preparing packages... (0/132)
+⠼ Preparing packages... (0/132)
+⠴ Preparing packages... (0/132)
+⠴ Preparing packages... (0/132)
+⠴ Preparing packages... (0/132)
+⠦ Preparing packages... (0/132)
+⠦ Preparing packages... (0/132)
+⠧ Preparing packages... (0/132)
+⠧ Preparing packages... (0/132)
+⠇ Preparing packages... (0/132)
+⠇ Preparing packages... (0/132)
+⠋ Preparing packages... (0/132)
+⠙ Preparing packages... (0/132)
+⠹ Preparing packages... (0/132)
+⠹ Preparing packages... (0/132)
+⠸ Preparing packages... (0/132)
+      Built transformers-stream-generator==0.0.5
+      Built py2store==0.1.22
+⠙ Preparing packages... (108/132)
+⠇ Preparing packages... (122/132)
+⠴ Preparing packages... (123/132)
+nvidia-cusparse        ------------------------------ 95.43 MiB/139.18 MiB
+nvidia-cusparselt-cu13 ------------------------------ 95.49 MiB/162.01 MiB
+triton                 ------------------------------ 95.29 MiB/179.57 MiB
+nvidia-nccl-cu13       ------------------------------ 94.92 MiB/187.39 MiB
+nvidia-cusolver        ------------------------------ 94.77 MiB/191.63 MiB
+nvidia-cufft           ------------------------------ 94.76 MiB/204.17 MiB
+nvidia-cudnn-cu13      ------------------------------ 95.29 MiB/349.11 MiB
+nvidia-cublas          ------------------------------ 94.95 MiB/403.53 MiB
+torch                  ------------------------------ 95.30 MiB/506.13 MiB                                                                                             Killed
+(mamay-venv) (main) root@C.33457600:/workspace/MamayScope$ 
+
+
