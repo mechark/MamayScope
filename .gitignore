@@ -15,3 +15,4 @@ temp/
 
 # Other
 .env
+data/
