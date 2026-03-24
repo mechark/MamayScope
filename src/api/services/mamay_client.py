@@ -17,7 +17,7 @@ class MamayClient:
             base_url (str): Base URL of the MamayScope API (default: http://localhost:8000)
         """
         self.base_url = base_url.rstrip("/")
-        self.client = httpx.AsyncClient(timeout=30.0)
+        self.client = httpx.AsyncClient(timeout=300.0)
     
     async def __aenter__(self):
         """Async context manager entry."""

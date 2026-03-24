@@ -23,10 +23,11 @@ async def main():
                 f"DATASET_LIMIT={settings.DATASET_LIMIT}")
     
     # Create executor
-    executor = PipelineExecutor(
+    executor = PipelineExecutor(steps=[
         UkrainianTextSource(),
         MamayActivationProcessor(),
         ParquetSink()
+    ]
     )
     
     # Run pipeline in loop until done

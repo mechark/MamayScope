@@ -1,6 +1,7 @@
 import torch
 from vllm_hook_plugins import HookedMamay
 from src.schemas.activations import ActivationPoint
+from src.core.settings import settings
 
 from typing import List
 
@@ -9,7 +10,7 @@ class HookedMamayService:
     Service for loading and providing access to the hooked MamayLLM running on vLLM-MamayHook.
     """
     def __init__(self):
-        layer_indices = list(range(42))  # Gemma-2-9B has 42 layers
+        layer_indices = [settings.TARGET_LAYER, settings.TARGET_LAYER - 1]  # Gemma-2-9B has 42 layers
 
         self.model = HookedMamay(
             important_layers=layer_indices,
