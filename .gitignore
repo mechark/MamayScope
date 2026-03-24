@@ -9,6 +9,7 @@ wheels/
 # Virtual environments
 .venv
 uv.lock
+steps.txt
 
 # Temporary files
 temp/
