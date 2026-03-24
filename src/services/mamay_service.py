@@ -17,7 +17,8 @@ class HookedMamayService:
             max_model_len=2048,
             trust_remote_code=True,
             dtype=torch.bfloat16,
-            tensor_parallel_size=1
+            tensor_parallel_size=1, 
+            download_dir="/workspace/.hf_home"
         )
 
     def generate_activations(self, texts: list[str]) -> List[tuple[str, list[ActivationPoint]]]:
@@ -53,7 +54,7 @@ class HookedMamayService:
 if __name__ == "__main__":
     service = HookedMamayService()
     texts = ["What is the capital of France?", "Who won the World Cup in 2018?"]
-    activations = service.generate_activations_probing(texts)
+    activations = service.generate_activations(texts)
     for text, acts in activations:
         print(f"Input: {text}")
         for act in acts:

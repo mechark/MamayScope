@@ -5,6 +5,7 @@ import logging
 
 from src.services.mock_mamay_service import MockMamayService
 from src.api.schemas.schemas import ActivationRequest, ActivationResponse
+from src.services.mamay_service import HookedMamayService
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -22,7 +23,8 @@ async def lifespan(app: FastAPI):
     logger.info("Initializing MockMamayService")
     try:
         # Initialize mock service with default parameters
-        model_service = MockMamayService(num_layers=42, hidden_size=3584)
+        # model_service = MockMamayService(num_layers=42, hidden_size=3584)
+        model_service = HookedMamayService()
         logger.info("MockMamayService initialized successfully")
     except Exception as e:
         logger.error(f"Failed to initialize service: {e}")
