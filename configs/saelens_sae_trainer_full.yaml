@@ -33,6 +33,7 @@ inference_model_subdir: sae_inference
 # Hub upload (model) - keep off unless you explicitly want it
 push_to_hub: true
 hf_repo_id: mechark/MamaySAE
+hf_commit_message: Upload trained SAE with l1_coefficient=10.0
 
 # W&B logging (enabled for full runs)
 log_to_wandb: true
