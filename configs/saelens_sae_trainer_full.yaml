@@ -1,0 +1,49 @@
+cached_activations_source: local
+cached_activations_path: data/saelens_cached_activations_blocks33_resid_post
+hook_name: blocks.33.hook_resid_post
+d_in: 3584
+
+# Device
+device: auto
+seed: 42
+shuffle_dataset: true
+
+# Training budget (tune to your 500k tokens dataset)
+training_tokens: 500000
+train_batch_size_tokens: 4096
+mixing_buffer_size_tokens: 200000
+
+# Small held-out validation slice (in tokens)
+validation_tokens: 10240
+validation_n_eval_batches: 20
+
+lr: 0.0003
+lr_end: 0.00003
+lr_scheduler_name: constant
+lr_warm_up_steps: 0
+
+autocast: true
+n_checkpoints: 0
+save_final_checkpoint: false
+
+# Output
+output_dir: artifacts/sae_lens_runs/full_blocks33_resid_post
+inference_model_subdir: sae_inference
+
+# Hub upload (model) - keep off unless you explicitly want it
+push_to_hub: false
+
+# W&B logging (enabled for full runs)
+log_to_wandb: true
+wandb_project: mamayscope-sae
+# wandb_entity: your-team-or-username
+# wandb_run_name: optional-run-name
+# wandb_log_frequency: 10
+
+sae:
+  # Standard L1 SAE. Start small-ish; increase later if you want.
+  d_sae: 16384
+  l1_coefficient: 5.0
+  normalize_activations: expected_average_only_in
+  apply_b_dec_to_input: true
+

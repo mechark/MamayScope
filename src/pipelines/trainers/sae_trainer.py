@@ -99,6 +99,16 @@ class SAELensTrainerStep(PipelineStep):
                 raise ValueError(f"Expected activations shaped (context_size, {d_in}), got {tuple(t.shape)}")
             yield t.reshape(-1, d_in)  # (tokens, d_in)
 
+    def _as_float_coeffs(self, coeffs: dict[str, object]) -> dict[str, float]:
+        out: dict[str, float] = {}
+        for k, v in coeffs.items():
+            # SAELens sometimes stores TrainCoefficientConfig-like values; for eval we only need floats.
+            if hasattr(v, "value"):
+                out[k] = float(getattr(v, "value"))
+            else:
+                out[k] = float(v)  # type: ignore[arg-type]
+        return out
+
     async def run(self, data: dict) -> dict:
         if data.get("done"):
             return data
@@ -119,6 +129,8 @@ class SAELensTrainerStep(PipelineStep):
         training_tokens = int(cfg.get("training_tokens", 10_000))
         train_batch_size_tokens = int(cfg.get("train_batch_size_tokens", 256))
         lr = float(cfg.get("lr", 3e-4))
+        validation_tokens = int(cfg.get("validation_tokens", 0))
+        validation_n_eval_batches = int(cfg.get("validation_n_eval_batches", 20))
 
         # Data pipeline knobs
         shuffle_dataset = bool(cfg.get("shuffle_dataset", True))
@@ -168,6 +180,7 @@ class SAELensTrainerStep(PipelineStep):
         from sae_lens.config import LoggingConfig, SAETrainerConfig
         from sae_lens.saes.sae import TrainingSAE
         from sae_lens.training.sae_trainer import SAETrainer
+        from sae_lens.saes.sae import TrainStepInput
 
         sae_cfg = StandardTrainingSAEConfig(
             d_in=d_in,
@@ -178,6 +191,116 @@ class SAELensTrainerStep(PipelineStep):
         )
 
         sae = TrainingSAE.from_dict(sae_cfg.to_dict()).to(device)
+
+        # Optional validation split/evaluator
+        evaluator = None
+        if validation_tokens > 0:
+            # We split by activation rows. Each dataset row contributes `context_size` tokens.
+            # Our cached activations are (context_size, d_in), so row_tokens is its 0th dim.
+            # We assume context_size is consistent (1024 in your dataset).
+            val_rows = max(1, validation_tokens // 1024)
+
+            source = str(cfg.get("cached_activations_source", "local")).lower()
+            streaming = bool(cfg.get("hf_streaming", True)) if source == "hf" else False
+            if source == "hf" and streaming:
+                raise ValueError(
+                    "Validation split requires non-streaming dataset. "
+                    "Set hf_streaming: false or use cached_activations_source: local."
+                )
+
+            # Load dataset once, then split deterministically.
+            if source == "local":
+                from datasets import load_from_disk
+
+                ds = load_from_disk(str(Path(cfg["cached_activations_path"])))
+            elif source == "hf":
+                from datasets import load_dataset
+
+                ds = load_dataset(
+                    str(cfg["hf_dataset_repo_id"]),
+                    data_dir=cfg.get("hf_data_dir"),
+                    split=str(cfg.get("hf_split", "train")),
+                    streaming=False,
+                )
+            else:
+                ds = None
+
+            if ds is None:
+                raise ValueError(f"Unsupported cached_activations_source={source!r}")
+
+            if hook_name not in getattr(ds, "column_names", []):
+                raise KeyError(
+                    f"Hook column {hook_name!r} not found in dataset. Available columns: {getattr(ds, 'column_names', None)}"
+                )
+
+            n_rows = len(ds)  # non-streaming only
+            if val_rows >= n_rows:
+                raise ValueError(f"validation split too large: val_rows={val_rows} >= n_rows={n_rows}")
+
+            val_ds = ds.select(range(0, val_rows))
+            train_ds = ds.select(range(val_rows, n_rows))
+
+            def _seq_iter_from_ds(split_ds):
+                epoch = 0
+                while True:
+                    epoch += 1
+                    epoch_ds = split_ds
+                    if shuffle_dataset:
+                        epoch_ds = epoch_ds.shuffle(seed=seed + epoch)
+                    for row in epoch_ds:
+                        act = row[hook_name]
+                        yield torch.as_tensor(act, dtype=torch.float32, device=device)
+
+            val_seq_iter = _seq_iter_from_ds(val_ds)
+            val_token_iter = self._flatten_token_batches(val_seq_iter, d_in=d_in)
+            val_data_provider = mixing_buffer(
+                buffer_size=mixing_buffer_size_tokens,
+                batch_size=train_batch_size_tokens,
+                activations_loader=val_token_iter,
+            )
+
+            def _evaluator(sae_model, _train_provider, activation_scaler):
+                sae_model.eval()
+                coeffs = self._as_float_coeffs(sae_model.get_coefficients())
+                total_mse = 0.0
+                total_explained_var = 0.0
+                total_l0 = 0.0
+
+                for _ in range(validation_n_eval_batches):
+                    batch = next(val_data_provider).to(sae_model.device)
+                    scaled = activation_scaler(batch)
+                    out = sae_model.training_forward_pass(
+                        TrainStepInput(
+                            sae_in=scaled,
+                            coefficients=coeffs,
+                            dead_neuron_mask=None,
+                            n_training_steps=0,
+                            is_logging_step=False,
+                        )
+                    )
+                    mse = float(out.losses["mse_loss"].item())
+                    total_mse += mse
+
+                    feature_acts = out.feature_acts
+                    l0 = feature_acts.bool().float().sum(-1).to_dense().mean().item()
+                    total_l0 += float(l0)
+
+                    sae_in = out.sae_in
+                    sae_out = out.sae_out
+                    per_token_l2_loss = (sae_out - sae_in).pow(2).sum(dim=-1).squeeze()
+                    total_variance = (sae_in - sae_in.mean(0)).pow(2).sum(-1)
+                    explained_variance = 1 - per_token_l2_loss.mean() / total_variance.mean()
+                    total_explained_var += float(explained_variance.item())
+
+                n = float(validation_n_eval_batches)
+                return {
+                    "val/loss_mse": total_mse / n,
+                    "val/metrics_explained_variance": total_explained_var / n,
+                    "val/metrics_l0": total_l0 / n,
+                    "val/val_rows": int(val_rows),
+                }
+
+            evaluator = _evaluator
 
         trainer_cfg = SAETrainerConfig(
             total_training_samples=training_tokens,
@@ -197,14 +320,22 @@ class SAELensTrainerStep(PipelineStep):
             n_checkpoints=int(cfg.get("n_checkpoints", 0)),
             checkpoint_path=str(cfg.get("checkpoint_path", output_dir / "checkpoints")),
             save_final_checkpoint=bool(cfg.get("save_final_checkpoint", False)),
-            logger=LoggingConfig(log_to_wandb=bool(cfg.get("log_to_wandb", False))),
+            logger=LoggingConfig(
+                log_to_wandb=bool(cfg.get("log_to_wandb", False)),
+                wandb_project=str(cfg.get("wandb_project", "mamayscope-sae")),
+                wandb_entity=(str(cfg["wandb_entity"]) if cfg.get("wandb_entity") else None),
+                wandb_id=(str(cfg["wandb_id"]) if cfg.get("wandb_id") else None),
+                run_name=(str(cfg["wandb_run_name"]) if cfg.get("wandb_run_name") else None),
+                wandb_log_frequency=int(cfg.get("wandb_log_frequency", 10)),
+                eval_every_n_wandb_logs=int(cfg.get("eval_every_n_wandb_logs", 100)),
+            ),
         )
 
         trainer = SAETrainer(
             cfg=trainer_cfg,
             sae=sae,
             data_provider=data_provider,
-            evaluator=None,
+            evaluator=evaluator,
         )
 
         trained_sae = trainer.fit()

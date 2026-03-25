@@ -22,6 +22,11 @@ training_tokens: 4096
 train_batch_size_tokens: 128
 mixing_buffer_size_tokens: 4096
 
+# Small validation split from the same dataset (in tokens).
+# 10k tokens ~= 10 activation rows when context_size=1024.
+validation_tokens: 10240
+validation_n_eval_batches: 5
+
 lr: 0.0003
 lr_end: 0.00003
 lr_scheduler_name: constant
