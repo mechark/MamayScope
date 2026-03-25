@@ -16,3 +16,4 @@ temp/
 # Other
 .env
 data/
+artifacts/

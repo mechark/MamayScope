@@ -33,3 +33,14 @@ The builder prints these at the end:
 
 Because we pack tokens across all sequences, padding should be **at most `context_size-1` tokens total** across the entire dataset.
 
+### Download the cached activations dataset to a GPU pod
+
+If you want to train on a GPU pod (or anywhere you want the dataset fully local), you can download the Hub dataset and persist it as a `datasets.save_to_disk()` directory:
+
+```bash
+export HF_TOKEN=...  # or HUGGINGFACE_HUB_TOKEN=...
+uv run python src/scripts/download_mamay_sae_dataset.py --out_dir MamaySAEDataset
+```
+
+This will create `./MamaySAEDataset/` containing the cached activations locally.
+
