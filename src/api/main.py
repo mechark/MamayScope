@@ -1,10 +1,11 @@
 from contextlib import asynccontextmanager
+import logging
+import os
+
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-import logging
 
 from src.services.mock_mamay_service import MockMamayService
-from src.services.mamay_service import HookedMamayService
 from src.api.schemas.schemas import ActivationRequest, ActivationResponse
 
 # Configure logging
@@ -20,12 +21,21 @@ async def lifespan(app: FastAPI):
     """Application lifespan manager for loading model on startup"""
     global model_service
     
-    logger.info("Initializing MockMamayService")
+    use_mock = os.environ.get("MAMAY_USE_MOCK", "").lower() in (
+        "1",
+        "true",
+        "yes",
+    )
     try:
-        # Initialize mock service with default parameters
-        # model_service = MockMamayService(num_layers=42, hidden_size=3584)
-        model_service = HookedMamayService()
-        logger.info("HookedMamayService initialized successfully")
+        if use_mock:
+            logger.info("Initializing MockMamayService (MAMAY_USE_MOCK set)")
+            model_service = MockMamayService()
+        else:
+            from src.services.mamay_service import HookedMamayService
+
+            logger.info("Initializing HookedMamayService")
+            model_service = HookedMamayService()
+        logger.info("Model service initialized successfully")
     except Exception as e:
         logger.error(f"Failed to initialize service: {e}")
         raise
@@ -58,10 +68,11 @@ app.add_middleware(
 @app.get("/")
 async def root():
     """Health check endpoint"""
+    name = type(model_service).__name__ if model_service else "none"
     return {
         "status": "healthy",
-        "service": "MockMamayService",
-        "message": "MamayScope API is running"
+        "service": name,
+        "message": "MamayScope API is running",
     }
 
 

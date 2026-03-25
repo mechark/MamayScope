@@ -79,10 +79,16 @@ class MamayClient:
         for text, acts_data in data["activations"]:
             activation_points = []
             for act in acts_data:
-                # Reconstruct tensor from serialized format
                 tensor_data = act["value"]
-                tensor = torch.tensor(tensor_data["data"])
-                
+                if isinstance(tensor_data, dict):
+                    raw = tensor_data["data"]
+                    shape = tensor_data.get("shape")
+                    tensor = torch.as_tensor(raw, dtype=torch.float32)
+                    if shape:
+                        tensor = tensor.reshape(*tuple(shape))
+                else:
+                    tensor = torch.as_tensor(tensor_data, dtype=torch.float32)
+
                 activation_points.append(
                     ActivationPoint(
                         name=act["name"],

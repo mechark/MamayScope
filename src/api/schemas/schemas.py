@@ -9,4 +9,10 @@ class ActivationRequest(BaseModel):
 
 class ActivationResponse(BaseModel):
     """Response schema for activations endpoint"""
-    activations: list[tuple[str, list[ActivationPoint]]] = Field(..., description="List of activation points with their values")
+    activations: list[tuple[str, list[ActivationPoint]]] = Field(
+        ...,
+        description=(
+            "Per-text activation points; each ``value`` may be [H] or [seq_len, H] "
+            "(serialized with shape + flat data)."
+        ),
+    )

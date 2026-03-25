@@ -7,12 +7,32 @@ class Settings(BaseSettings):
     TARGET_LAYER: int = 33
     BATCH_SIZE: int = 32
     DATASET_LIMIT: int = 100000
-    OUTPUT_PARQUET_PATH: str = "data/sae_training.parquet"
-   
+    OUTPUT_PARQUET_PATH: str = "data/sae_training_fullseq-part5.parquet"
+    PARALLEL_REQUESTS: int = 4
+    HIDDEN_SIZE: int = 3584
+    MAMAY_IMPORTANT_LAYERS: str | None = None
+    PIPELINE_FLATTEN_TOKENS: bool = False
+    MOCK_SEQ_LEN: int = 8
+    MAX_RETRIES: int = 3
+    RETRY_DELAY: float = 2.0
+
     model_config = SettingsConfigDict(
         env_file=".env",
         case_sensitive=False,
-        env_nested_delimiter="__"
+        env_nested_delimiter="__",
     )
+
+    def resolved_mamay_important_layers(self) -> list[int]:
+        """Layer indices for HookedMamay: env comma-list or [TARGET_LAYER-1, TARGET_LAYER]."""
+        raw = self.MAMAY_IMPORTANT_LAYERS
+        if raw and raw.strip():
+            return [
+                int(x.strip())
+                for x in raw.split(",")
+                if x.strip()
+            ]
+        t = self.TARGET_LAYER
+        return [t - 1, t]
+
 
 settings = Settings()

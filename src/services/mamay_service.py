@@ -10,7 +10,7 @@ class HookedMamayService:
     Service for loading and providing access to the hooked MamayLLM running on vLLM-MamayHook.
     """
     def __init__(self):
-        layer_indices = [settings.TARGET_LAYER, settings.TARGET_LAYER - 1]  # Gemma-2-9B has 42 layers
+        layer_indices = settings.resolved_mamay_important_layers()
 
         self.model = HookedMamay(
             important_layers=layer_indices,
@@ -18,7 +18,8 @@ class HookedMamayService:
             max_model_len=2048,
             trust_remote_code=True,
             dtype=torch.bfloat16,
-            tensor_parallel_size=1
+            tensor_parallel_size=1, 
+            download_dir="/workspace/.hf_home"
         )
 
     def generate_activations(self, texts: list[str]) -> List[tuple[str, list[ActivationPoint]]]:
@@ -31,12 +32,13 @@ class HookedMamayService:
         Returns:
             List[tuple[str, list[ActivationPoint]]]: List of tuples containing input text and corresponding activation points.
 
-        Activations will be of shape [hidden_size] for each layer.
+        Each layer ``value`` has shape ``[seq_len, hidden_size]``; last-token
+        vector is ``value[-1, :]``. Longer prompts increase ``seq_len`` and memory.
         """
         all_activations = []
 
         for text in texts:
-            _, activations_dict = self.model.generate(text) # activations is Dict[layer_idx, Tensor[hidden_size]]
+            _, activations_dict = self.model.generate(text)
             activations = []
             
             for layer_idx, layer_acts in activations_dict.items():
@@ -54,7 +56,7 @@ class HookedMamayService:
 if __name__ == "__main__":
     service = HookedMamayService()
     texts = ["What is the capital of France?", "Who won the World Cup in 2018?"]
-    activations = service.generate_activations_probing(texts)
+    activations = service.generate_activations(texts)
     for text, acts in activations:
         print(f"Input: {text}")
         for act in acts:

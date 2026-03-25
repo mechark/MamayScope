@@ -8,10 +8,11 @@ from src.core.settings import settings
 class UkrainianTextSource(PipelineStep):
     """Source that yields batches of Ukrainian user texts from Hermes3-UK dataset"""
     
-    def __init__(self):
+    def __init__(self, skip_count: int = 0):
         self.logger = logging.getLogger(__name__)
         self.dataset_iterator: Iterator | None = None
         self.processed_count = 0
+        self.skip_count = skip_count
         self.limit = settings.DATASET_LIMIT
         self.batch_size = settings.BATCH_SIZE
         
@@ -44,6 +45,18 @@ class UkrainianTextSource(PipelineStep):
                         yield text
             
             self.dataset_iterator = text_generator()
+            
+            # Skip initial records if skip_count is set
+            if self.skip_count > 0:
+                self.logger.info(f"Skipping first {self.skip_count} texts...")
+                for i in range(self.skip_count):
+                    try:
+                        next(self.dataset_iterator)
+                    except StopIteration:
+                        self.logger.warning(f"Dataset exhausted after skipping {i} texts")
+                        break
+                self.logger.info(f"Starting from position {self.skip_count}")
+            
             self.logger.info("Dataset iterator initialized")
     
     async def run(self, data: dict) -> dict:

@@ -5,7 +5,10 @@ import torch
 class ActivationPoint(BaseModel):
     """Response model for activation endpoint"""
     name: str = Field(..., description="Name of the activation point")
-    value: torch.Tensor = Field(..., description="Activation values as a tensor")
+    value: torch.Tensor = Field(
+        ...,
+        description="Activations tensor: shape [hidden_size] (legacy) or [seq_len, hidden_size].",
+    )
     
     @field_serializer('value')
     def serialize_tensor(self, tensor: torch.Tensor) -> dict:

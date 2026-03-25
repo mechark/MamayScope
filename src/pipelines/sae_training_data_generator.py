@@ -23,8 +23,9 @@ async def main():
                 f"DATASET_LIMIT={settings.DATASET_LIMIT}")
     
     # Create executor
+    # Set skip_count to resume from a specific position (e.g., skip_count=5000)
     executor = PipelineExecutor(steps=[
-        UkrainianTextSource(),
+        UkrainianTextSource(skip_count=100000+792+224+544),
         MamayActivationProcessor(),
         ParquetSink()
     ]

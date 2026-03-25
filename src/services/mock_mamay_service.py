@@ -1,5 +1,6 @@
 import torch
 from src.schemas.activations import ActivationPoint
+from src.core.settings import settings
 from typing import List
 
 
@@ -9,16 +10,23 @@ class MockMamayService:
     Mimics the behavior of HookedMamayService without requiring actual model loading.
     """
     
-    def __init__(self, num_layers: int = 42, hidden_size: int = 3584):
+    def __init__(
+        self,
+        num_layers: int = 42,
+        hidden_size: int | None = None,
+        seq_len: int | None = None,
+    ):
         """
         Initialize the mock service.
-        
+
         Args:
-            num_layers (int): Number of layers to simulate (default: 42 for Gemma-2-9B)
-            hidden_size (int): Hidden dimension size (default: 3584 for Gemma-2-9B)
+            num_layers: Number of layers to simulate (default: 42 for Gemma-2-9B).
+            hidden_size: Hidden dim; defaults to ``settings.HIDDEN_SIZE``.
+            seq_len: Sequence length for 2D activations; defaults to ``settings.MOCK_SEQ_LEN``.
         """
         self.num_layers = num_layers
-        self.hidden_size = hidden_size
+        self.hidden_size = hidden_size if hidden_size is not None else settings.HIDDEN_SIZE
+        self.seq_len = seq_len if seq_len is not None else settings.MOCK_SEQ_LEN
         
     def generate_activations(self, texts: list[str]) -> List[tuple[str, list[ActivationPoint]]]:
         """
@@ -38,8 +46,7 @@ class MockMamayService:
             
             # Generate random activations for each layer
             for layer_idx in range(self.num_layers):
-                # Generate random tensor with shape [hidden_size]
-                random_tensor = torch.randn(self.hidden_size)
+                random_tensor = torch.randn(self.seq_len, self.hidden_size)
                 
                 activations.append(
                     ActivationPoint(
