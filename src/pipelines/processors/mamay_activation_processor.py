@@ -38,14 +38,26 @@ class MamayActivationProcessor(PipelineStep):
     async def run(self, data: dict) -> dict:
         """Fetch activations and extract input/output tensors for target layer"""
         texts = data.get("texts", [])
-        
+        labels_in = data.get("labels")
+        if labels_in is not None and len(labels_in) != len(texts):
+            self.logger.warning(
+                "labels length %s != texts length %s; dropping labels",
+                len(labels_in),
+                len(texts),
+            )
+            labels_in = None
+
         if not texts:
             self.logger.warning("No texts to process")
-            return {
+            out_empty: dict = {
                 "input_tensors": [],
                 "output_tensors": [],
-                "done": data.get("done", True)
+                "done": data.get("done", False),
+                "texts": [],
             }
+            if labels_in is not None:
+                out_empty["labels"] = []
+            return out_empty
         
         # Split texts into chunks for parallel processing
         num_parallel = min(self.parallel_requests, len(texts))
@@ -71,6 +83,7 @@ class MamayActivationProcessor(PipelineStep):
         output_tensors: list[torch.Tensor] = []
         source_texts: list[str] = []
         token_indices: list[int] = []
+        labels_per_row: list = []
         h = settings.HIDDEN_SIZE
         flatten = settings.PIPELINE_FLATTEN_TOKENS
 
@@ -85,8 +98,9 @@ class MamayActivationProcessor(PipelineStep):
                 return t.unsqueeze(0)
             return t
 
-        for text, activation_points in activations_data:
+        for row_idx, (text, activation_points) in enumerate(activations_data):
             activation_dict = {ap.name: ap.value for ap in activation_points}
+            row_label = labels_in[row_idx] if labels_in is not None else None
 
             if input_layer_name in activation_dict:
                 input_tensor = activation_dict[input_layer_name].float()
@@ -125,6 +139,7 @@ class MamayActivationProcessor(PipelineStep):
                     output_tensors.append(output_tensor[t_idx].contiguous())
                     source_texts.append(text)
                     token_indices.append(t_idx)
+                    labels_per_row.append(row_label)
             else:
                 input_tensors.append(input_tensor)
                 output_tensors.append(output_tensor)
@@ -142,4 +157,11 @@ class MamayActivationProcessor(PipelineStep):
         if flatten and source_texts:
             out["source_texts"] = source_texts
             out["token_indices"] = token_indices
+            out["texts"] = source_texts
+            out["labels"] = labels_per_row
+        else:
+            out["texts"] = list(texts)
+            if labels_in is not None:
+                out["labels"] = list(labels_in)
+
         return out

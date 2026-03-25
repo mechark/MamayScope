@@ -22,6 +22,23 @@ class Settings(BaseSettings):
     MAX_RETRIES: int = 3
     RETRY_DELAY: float = 2.0
 
+    # Neuron labeling pipeline (HF CSV + Mamay + SAELens encode → Parquet)
+    NEURON_LABEL_PARQUET_PATH: str = "data/neuron_labels/labels.parquet"
+    NEURON_LABEL_JSONL_PATH: str = "data/neuron_labels/labels.jsonl"
+    NEURON_LABEL_DATASET_LIMIT: int = 10_000
+    NEURON_LABEL_HF_DATASET: str = "mechark/controversial_statements"
+    NEURON_LABEL_CSV_FILE: str = "probing_dataset.csv"
+    NEURON_LABEL_TEXT_COLUMN: str = "text"
+    NEURON_LABEL_LABEL_COLUMN: str = "label"
+    SAE_HF_REPO_ID: str = "mechark/MamaySAE"
+    SAE_HF_REVISION: str = "654d8abdaddfdcd39a34a12bbba3e332f8c11b79"
+    SAE_SNAPSHOT_CACHE_DIR: str = ".cache/mamayscope/sae_snapshot"
+    SAE_DEVICE: Literal["auto", "mps", "cpu", "cuda"] = "auto"
+    # HF model id for AutoTokenizer (default Gemma 2 9B — override to match Mamay if seq lengths disagree)
+    NEURON_LABEL_MODEL_NAME: str = "google/gemma-2-9b"
+    # JSON field sae_id; if empty, derived as layer_{TARGET}_{repo_stem}_{short_rev}
+    NEURON_LABEL_SAE_ID: str = ""
+
     model_config = SettingsConfigDict(
         env_file=".env",
         case_sensitive=False,
