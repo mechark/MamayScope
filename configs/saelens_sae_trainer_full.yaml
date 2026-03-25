@@ -1,10 +1,10 @@
 cached_activations_source: local
-cached_activations_path: data/saelens_cached_activations_blocks33_resid_post
+cached_activations_path: MamaySAEDataset
 hook_name: blocks.33.hook_resid_post
 d_in: 3584
 
 # Device
-device: auto
+device: cuda
 seed: 42
 shuffle_dataset: true
 
@@ -31,7 +31,8 @@ output_dir: artifacts/sae_lens_runs/full_blocks33_resid_post
 inference_model_subdir: sae_inference
 
 # Hub upload (model) - keep off unless you explicitly want it
-push_to_hub: false
+push_to_hub: true
+hf_repo_id: mechark/MamaySAE
 
 # W&B logging (enabled for full runs)
 log_to_wandb: true
@@ -46,4 +47,3 @@ sae:
   l1_coefficient: 5.0
   normalize_activations: expected_average_only_in
   apply_b_dec_to_input: true
-

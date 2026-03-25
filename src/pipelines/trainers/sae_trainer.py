@@ -338,7 +338,41 @@ class SAELensTrainerStep(PipelineStep):
             evaluator=evaluator,
         )
 
-        trained_sae = trainer.fit()
+        # SAELens' SAETrainer will call wandb.log(...) directly when log_to_wandb is enabled,
+        # so we must initialize wandb in *this* process before training starts.
+        wandb_run = None
+        if trainer_cfg.logger.log_to_wandb:
+            import wandb
+
+            wandb_run = wandb.init(
+                project=trainer_cfg.logger.wandb_project,
+                entity=trainer_cfg.logger.wandb_entity,
+                id=trainer_cfg.logger.wandb_id,
+                name=trainer_cfg.logger.run_name,
+                resume="allow",
+                config={
+                    "hook_name": hook_name,
+                    "d_in": d_in,
+                    "d_sae": d_sae,
+                    "training_tokens": training_tokens,
+                    "train_batch_size_tokens": train_batch_size_tokens,
+                    "device": device,
+                    "validation_tokens": validation_tokens,
+                    "cached_activations_source": cfg.get("cached_activations_source", "local"),
+                },
+            )
+
+        try:
+            trained_sae = trainer.fit()
+        finally:
+            if wandb_run is not None:
+                try:
+                    import wandb
+
+                    wandb.finish()
+                except Exception:
+                    # Don't fail training completion due to logging teardown issues.
+                    self.logger.exception("wandb.finish() failed")
 
         return {
             **data,
