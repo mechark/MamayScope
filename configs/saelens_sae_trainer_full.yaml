@@ -38,12 +38,12 @@ hf_repo_id: mechark/MamaySAE
 log_to_wandb: true
 wandb_project: mamayscope-sae
 # wandb_entity: your-team-or-username
-# wandb_run_name: optional-run-name
-# wandb_log_frequency: 10
+wandb_run_name: full_blocks33_resid_post-l1_10
+wandb_log_frequency: 10
 
 sae:
   # Standard L1 SAE. Start small-ish; increase later if you want.
   d_sae: 16384
-  l1_coefficient: 5.0
+  l1_coefficient: 10.0
   normalize_activations: expected_average_only_in
   apply_b_dec_to_input: true
