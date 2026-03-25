@@ -1,4 +1,5 @@
-from pydantic import BaseModel, Field
+from typing import Literal
+
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
@@ -7,7 +8,12 @@ class Settings(BaseSettings):
     TARGET_LAYER: int = 33
     BATCH_SIZE: int = 32
     DATASET_LIMIT: int = 100000
-    OUTPUT_PARQUET_PATH: str = "data/sae_training_fullseq-part5.parquet"
+    OUTPUT_PARQUET_PATH: str = "data/politics_activations/sae_training_fullseq.parquet"
+    SAE_TEXT_SOURCE: Literal["hermes", "parquet"] = "hermes"
+    SAE_CORPUS_PARQUET_PATH: str = "data/corpus"
+    SAE_CORPUS_TEXT_COLUMN: str = "text"
+    SAE_CORPUS_SKIP_ROWS: int = 0
+    SAE_HERMES_SKIP_COUNT: int = 100_000 + 792 + 224 + 544
     PARALLEL_REQUESTS: int = 4
     HIDDEN_SIZE: int = 3584
     MAMAY_IMPORTANT_LAYERS: str | None = None
