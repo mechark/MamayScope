@@ -197,7 +197,7 @@ def _parse_args() -> argparse.Namespace:
     )
     p.add_argument(
         "--input-parquet-glob",
-        default="data/neuron_labels/*_batch_*.parquet",
+        default="data/neuron_labels_mamay/*_batch_*.parquet",
         help="Glob for input neuron-label Parquet batches.",
     )
     p.add_argument("--top-k", type=int, default=20, help="Sample up to K contexts per feature.")
@@ -222,7 +222,7 @@ def _parse_args() -> argparse.Namespace:
     )
     p.add_argument(
         "--output-jsonl",
-        default="data/neuron_labels/neuronpedia_feature_labels.jsonl",
+        default="data/neuron_labels_mamay/results/neuronpedia_feature_labels.jsonl",
         help="Output JSONL path (used only when LLM is enabled).",
     )
     p.add_argument(

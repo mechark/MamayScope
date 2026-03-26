@@ -1,4 +1,5 @@
 import torch
+import logging
 from vllm_hook_plugins import HookedMamay
 from src.schemas.activations import ActivationPoint
 from src.api.schemas.schemas import ActivationRow
@@ -11,6 +12,7 @@ class HookedMamayService:
     Service for loading and providing access to the hooked MamayLLM running on vLLM-MamayHook.
     """
     def __init__(self):
+        self.logger = logging.getLogger(__name__)
         layer_indices = settings.resolved_mamay_important_layers()
 
         self.model = HookedMamay(
@@ -42,7 +44,17 @@ class HookedMamayService:
             input_ids: list[int] | None = None
             gen_with_ids = getattr(self.model, "generate_with_input_ids", None)
             if callable(gen_with_ids):
-                _, activations_dict, input_ids = gen_with_ids(text)
+                try:
+                    _, activations_dict, input_ids = gen_with_ids(text)
+                except Exception as e:
+                    # Do not fail the whole /activations request for one row when token/id
+                    # alignment helper raises; fall back to activations-only response.
+                    self.logger.warning(
+                        "generate_with_input_ids failed for text %r (%s); falling back to generate() without input_ids",
+                        text[:80],
+                        e,
+                    )
+                    _, activations_dict = self.model.generate(text)
             else:
                 _, activations_dict = self.model.generate(text)
             activations = []

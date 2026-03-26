@@ -19,21 +19,60 @@ class MamayActivationProcessor(PipelineStep):
         self.retry_delay = settings.RETRY_DELAY
     
     async def _get_activations_with_retry(self, chunk: list[str], chunk_idx: int) -> list:
-        """Get activations with exponential backoff retry logic"""
+        """Get activations with retry; on persistent 5xx split chunk to isolate bad rows."""
+        if not chunk:
+            return []
+
+        async def _split_now() -> list:
+            if len(chunk) == 1:
+                return []
+            mid = len(chunk) // 2
+            self.logger.warning(
+                "Chunk %s received 5xx; splitting %s -> %s + %s to isolate bad rows",
+                chunk_idx,
+                len(chunk),
+                mid,
+                len(chunk) - mid,
+            )
+            left = await self._get_activations_with_retry(chunk[:mid], chunk_idx * 2)
+            right = await self._get_activations_with_retry(chunk[mid:], chunk_idx * 2 + 1)
+            return left + right
+
+        last_exc: Exception | None = None
         for attempt in range(self.max_retries):
             try:
                 return await self.client.get_activations(chunk)
-            except (httpx.HTTPStatusError, httpx.ReadTimeout, httpx.ConnectTimeout) as e:
-                if attempt < self.max_retries - 1:
-                    delay = self.retry_delay * (2 ** attempt)
-                    self.logger.warning(
-                        f"Chunk {chunk_idx} failed (attempt {attempt + 1}/{self.max_retries}): {e}. "
-                        f"Retrying in {delay}s..."
-                    )
-                    await asyncio.sleep(delay)
-                else:
-                    self.logger.error(f"Chunk {chunk_idx} failed after {self.max_retries} attempts")
+            except (httpx.ReadTimeout, httpx.ConnectTimeout) as e:
+                last_exc = e
+            except httpx.HTTPStatusError as e:
+                last_exc = e
+                # For server-side row failures (HTTP 5xx), split large chunks immediately.
+                status = e.response.status_code if e.response is not None else None
+                if status is not None and status < 500:
                     raise
+                if status is not None and status >= 500 and len(chunk) > 1:
+                    return await _split_now()
+
+            if attempt < self.max_retries - 1:
+                delay = self.retry_delay * (2 ** attempt)
+                self.logger.warning(
+                    f"Chunk {chunk_idx} failed (attempt {attempt + 1}/{self.max_retries}): {last_exc}. "
+                    f"Retrying in {delay}s..."
+                )
+                await asyncio.sleep(delay)
+
+        # Persistent failure: isolate problematic text(s) by splitting.
+        if len(chunk) > 1:
+            return await _split_now()
+
+        # Single-row failure: preserve pipeline progress with empty activations for this text.
+        text = chunk[0] if chunk else ""
+        self.logger.error(
+            "Single text failed after retries in chunk %s; returning empty activations for text=%r",
+            chunk_idx,
+            text[:120],
+        )
+        return [(text, [], None)]
         
     async def run(self, data: dict) -> dict:
         """Fetch activations and extract input/output tensors for target layer"""

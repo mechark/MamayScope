@@ -274,6 +274,23 @@ class SaeFeatureEncodeProcessor(PipelineStep):
             ids = [int(x) for x in input_ids]
             if len(ids) == seq_len:
                 return ids
+            if len(ids) == seq_len + 1:
+                self._ensure_tokenizer()
+                tok = self._tokenizer
+                bos_id = getattr(tok, "bos_token_id", None) if tok is not None else None
+                # Common HookedMamay/vLLM mismatch: server returns one extra token id.
+                # Prefer dropping BOS when present; otherwise drop the trailing token.
+                if bos_id is not None and ids and ids[0] == bos_id:
+                    self.logger.info(
+                        "Server input_ids are +1 vs activations; dropping leading BOS for alignment (text=%r)",
+                        text[:80],
+                    )
+                    return ids[1:]
+                self.logger.info(
+                    "Server input_ids are +1 vs activations; dropping trailing token for alignment (text=%r)",
+                    text[:80],
+                )
+                return ids[:seq_len]
             self.logger.warning(
                 "Server provided input_ids len=%s but activation seq_len=%s; falling back to local tokenization (text=%r)",
                 len(ids),
@@ -288,6 +305,9 @@ class SaeFeatureEncodeProcessor(PipelineStep):
         fired_per_token: list[list[int]],
         input_ids: list[int] | None,
     ) -> list[dict]:
+        # We may use server-provided input_ids and skip local tokenization entirely.
+        # Ensure tokenizer is still loaded so token_id -> token_str decoding works.
+        self._ensure_tokenizer()
         seq_len = len(fired_per_token)
         ids = self._token_ids_for_row(text, seq_len, input_ids)
         tok = self._tokenizer
