@@ -9,6 +9,7 @@ from typing import Any
 import httpx
 
 from src.core.settings import settings
+from src.prompts.system import LABELING_PROMPT
 
 _DEFAULT_CHAT_COMPLETIONS_PATH = "chat/completions"
 
@@ -210,29 +211,48 @@ class OpenRouterLabelingService:
             raise ValueError("Parsed JSON is not an object.")
         return parsed
 
-    def _build_prompts(self, *, feature_id: int, contexts: list[str]) -> tuple[str, str]:
-        system_prompt = (
-            "You are an expert AI interpretability researcher. Your task is to analyze the activations "
-            "of a specific feature (neuron) inside a neural network.\n"
-            "I will give you a list of text snippets. In each snippet, one specific token is highlighted "
-            "with brackets, like this: [token]. The feature activated strongly on this specific token in "
-            "this specific context.\n\n"
-            "Your job is to figure out the underlying concept, pattern, or syntax rule that causes this "
-            "feature to fire.\n"
-            "Look for commonalities. Is it firing on a specific word? A part of speech? A grammatical "
-            "structure? A semantic concept?\n\n"
-            "Output your response in JSON format with two keys:\n"
-            '  "thought_process": A brief explanation of the pattern you see.\n'
-            '  "label": A concise, 1-to-5 word label describing what the feature represents.\n'
-        )
-        user_prompt = f"Feature #{feature_id} Activations:\n\n" + "\n\n".join(contexts)
+    def _build_prompts(
+        self,
+        *,
+        feature_id: int,
+        contexts: list[str],
+        avoid_labels: list[str] | None = None,
+        force_specific: bool = False,
+    ) -> tuple[str, str]:
+        system_prompt = LABELING_PROMPT
+        extra_rules = ""
+        if force_specific:
+            extra_rules += (
+                "\nAdditional constraints:\n"
+                "- Avoid generic labels like 'Key Concept' or 'Semantic Element'.\n"
+                "- Label should name a concrete pattern (topic, lexical family, construct, role).\n"
+                "- If uncertain, still pick the most specific plausible pattern from contexts.\n"
+            )
+        if avoid_labels:
+            banned = ", ".join(sorted({x.strip() for x in avoid_labels if str(x).strip()}))
+            if banned:
+                extra_rules += f"\nDo NOT use these labels: {banned}\n"
+
+        user_prompt = f"Feature #{feature_id} Activations:\n\n" + "\n\n".join(contexts) + extra_rules
         return system_prompt, user_prompt
 
-    def label_feature(self, *, feature_id: int, contexts: list[str]) -> FeatureLabelResult:
+    def label_feature(
+        self,
+        *,
+        feature_id: int,
+        contexts: list[str],
+        avoid_labels: list[str] | None = None,
+        force_specific: bool = False,
+    ) -> FeatureLabelResult:
         if not contexts:
             raise ValueError("contexts must be non-empty")
 
-        system_prompt, user_prompt = self._build_prompts(feature_id=feature_id, contexts=contexts)
+        system_prompt, user_prompt = self._build_prompts(
+            feature_id=feature_id,
+            contexts=contexts,
+            avoid_labels=avoid_labels,
+            force_specific=force_specific,
+        )
 
         def _post_json(body: dict[str, Any]) -> httpx.Response:
             with httpx.Client(timeout=self.timeout_s, follow_redirects=True) as client:

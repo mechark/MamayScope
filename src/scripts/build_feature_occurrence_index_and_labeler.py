@@ -7,8 +7,8 @@ Each Parquet row is a source text with a nested `tokens` list. Each token has `f
 
   Sentence -> Token -> Features
   becomes
-  Feature -> sampled list of occurrences, where each occurrence stores a 10ish-token
-  context window (5 tokens before + fired token + 5 tokens after).
+  Feature -> sampled list of occurrences, where each occurrence stores a broader
+  context window (default: 20 tokens before + fired token + 20 tokens after).
 
 This script can run in index-only mode via --skip-llm.
 """
@@ -18,16 +18,97 @@ from __future__ import annotations
 import argparse
 import glob
 import json
+import math
 import random
 import re
 from collections import defaultdict
 from dataclasses import dataclass
+from functools import lru_cache
 from pathlib import Path
 from typing import Any, Iterable, Iterator
 
 import pyarrow.parquet as pq
 
 from src.services.openrouter_labeling_service import OpenRouterLabelingService
+
+
+_LOW_INFO_EXACT_TOKENS = {
+    "",
+    "<PAD>",
+    "<bos>",
+    "<eos>",
+    "<unk>",
+    "[]",
+    "()",
+}
+
+_LOW_INFO_STOPWORDS = {
+    "a",
+    "an",
+    "and",
+    "are",
+    "as",
+    "at",
+    "be",
+    "but",
+    "by",
+    "for",
+    "from",
+    "in",
+    "is",
+    "it",
+    "not",
+    "of",
+    "on",
+    "or",
+    "that",
+    "the",
+    "this",
+    "to",
+    "was",
+    "with",
+    # Common Ukrainian stop words.
+    "а",
+    "але",
+    "бо",
+    "в",
+    "від",
+    "вона",
+    "вони",
+    "воно",
+    "він",
+    "до",
+    "з",
+    "за",
+    "й",
+    "і",
+    "їх",
+    "його",
+    "ми",
+    "на",
+    "не",
+    "про",
+    "та",
+    "ти",
+    "то",
+    "у",
+    "це",
+    "ця",
+    "ці",
+    "цей",
+    "що",
+    "я",
+}
+
+_GENERIC_LABEL_PHRASES = (
+    "key concept",
+    "concept identification",
+    "semantic element",
+    "semantic entities",
+    "noun/descriptor",
+    "categorical and relational",
+    "relational or comparative",
+)
 
 
 @dataclass(frozen=True)
@@ -48,16 +129,155 @@ def _normalize_token_for_prompt(token: str) -> str:
     return t.strip()
 
 
+def _normalize_token_for_context(token: str) -> str:
+    """Keep token spacing for context reconstruction, only sanitize control chars/brackets."""
+    t = str(token)
+    t = t.replace("[", "(").replace("]", ")")
+    t = t.replace("\n", " ").replace("\r", " ").replace("\t", " ")
+    return t
+
+
+def _highlight_token_for_context(token: str) -> str:
+    """
+    Wrap a fired token with brackets while preserving leading whitespace.
+    This keeps subword-detokenized text readable in multilingual contexts.
+    """
+    leading_ws_len = len(token) - len(token.lstrip(" "))
+    leading_ws = token[:leading_ws_len]
+    core = token[leading_ws_len:]
+    core = core if core else "<PAD>"
+    return f"{leading_ws}[{core}]"
+
+
+@lru_cache(maxsize=4)
+def _load_tokenizer(model_name: str) -> Any | None:
+    try:
+        from transformers import AutoTokenizer
+    except Exception:
+        return None
+    try:
+        return AutoTokenizer.from_pretrained(model_name, use_fast=True)
+    except Exception as exc:
+        print(f"[warn] Failed to load tokenizer for {model_name}: {exc}")
+        return None
+
+
+def _is_low_information_token(token: str) -> bool:
+    """Reject structural-only fired tokens that dominate generic punctuation labels."""
+    t = _normalize_token_for_prompt(token)
+    t_lower = t.lower()
+    if t in _LOW_INFO_EXACT_TOKENS:
+        return True
+    if t_lower in _LOW_INFO_STOPWORDS:
+        return True
+    # Ignore punctuation-only and delimiter fragments.
+    if re.fullmatch(r"[^\w\s]+", t):
+        return True
+    # One-char non-alnum markers are usually structural noise for labeling.
+    if len(t) == 1 and not t.isalnum():
+        return True
+    return False
+
+
+def _token_diversity_stats(occurrences: list[OccurrenceContext]) -> tuple[int, float]:
+    """Return unique token count and unique/total ratio for sampled contexts."""
+    if not occurrences:
+        return 0, 0.0
+    normalized_tokens = [
+        _normalize_token_for_prompt(occ.token).lower() for occ in occurrences if occ.token
+    ]
+    if not normalized_tokens:
+        return 0, 0.0
+    unique_count = len(set(normalized_tokens))
+    return unique_count, unique_count / max(1, len(normalized_tokens))
+
+
+def _token_entropy(occurrences: list[OccurrenceContext]) -> float:
+    normalized_tokens = [
+        _normalize_token_for_prompt(occ.token).lower() for occ in occurrences if occ.token
+    ]
+    total = len(normalized_tokens)
+    if total <= 1:
+        return 0.0
+    counts: dict[str, int] = defaultdict(int)
+    for tok in normalized_tokens:
+        counts[tok] += 1
+    entropy = 0.0
+    for c in counts.values():
+        p = c / total
+        entropy -= p * math.log2(p)
+    return entropy
+
+
+def order_features_for_labeling(
+    feature_counts: dict[int, int],
+    sampled_occurrences: dict[int, list[OccurrenceContext]],
+) -> list[int]:
+    """
+    Rank features for labeling by token diversity first, then support.
+
+    Prioritizing diverse fired-token samples tends to produce more semantic labels
+    and de-prioritizes generic grammar/function-word features.
+    """
+
+    def _priority(fid: int) -> tuple[float, int, int, int]:
+        occs = sampled_occurrences.get(fid, [])
+        unique_count, diversity_ratio = _token_diversity_stats(occs)
+        return (
+            diversity_ratio,
+            unique_count,
+            len(occs),
+            feature_counts.get(fid, 0),
+        )
+
+    return sorted(sampled_occurrences.keys(), key=_priority, reverse=True)
+
+
+def apply_feature_quality_gate(
+    ordered_feature_ids: list[int],
+    sampled_occurrences: dict[int, list[OccurrenceContext]],
+    *,
+    min_unique_tokens: int,
+    min_diversity_ratio: float,
+    min_token_entropy: float,
+) -> list[int]:
+    gated: list[int] = []
+    for fid in ordered_feature_ids:
+        occs = sampled_occurrences.get(fid, [])
+        unique_count, diversity_ratio = _token_diversity_stats(occs)
+        entropy = _token_entropy(occs)
+        if unique_count < min_unique_tokens:
+            continue
+        if diversity_ratio < min_diversity_ratio:
+            continue
+        if entropy < min_token_entropy:
+            continue
+        gated.append(fid)
+    return gated
+
+
+def is_generic_label(label: str) -> bool:
+    norm = " ".join(str(label or "").strip().lower().split())
+    if not norm:
+        return True
+    return any(phrase in norm for phrase in _GENERIC_LABEL_PHRASES)
+
+
+def _normalize_label_key(label: str) -> str:
+    return " ".join(str(label or "").strip().lower().split())
+
+
 def build_context_window(
     tokens: list[dict[str, Any]],
     fired_token_index: int,
     *,
-    radius: int = 5,
+    radius: int = 20,
+    tokenizer: Any | None = None,
 ) -> tuple[str, str, int]:
     """
     Build a fixed window around `fired_token_index`.
 
-    We include 5 tokens before + 1 fired token + 5 tokens after => up to 11 tokens.
+    We include `radius` tokens before + 1 fired token + `radius` tokens after.
     If indices go out of bounds, use '<PAD>'.
     """
     left = fired_token_index - radius
@@ -68,18 +288,62 @@ def build_context_window(
     fired_token_id = int(fired.get("token_id", -1))
 
     window_parts: list[str] = []
+    left_pad_count = 0
+    right_pad_count = 0
     for i in range(left, right + 1):
         if i < 0 or i >= len(tokens):
             window_parts.append("<PAD>")
+            if i < 0:
+                left_pad_count += 1
+            else:
+                right_pad_count += 1
             continue
         tok = tokens[i]
-        tok_str = _normalize_token_for_prompt(tok.get("token_str", ""))
+        tok_str = _normalize_token_for_context(tok.get("token_str", ""))
         if i == fired_token_index:
-            window_parts.append(f"[{tok_str}]")
+            window_parts.append(_highlight_token_for_context(tok_str))
         else:
             window_parts.append(tok_str)
 
-    context = " ".join(window_parts).strip()
+    if tokenizer is not None and fired_token_id >= 0:
+        try:
+            left_ids: list[int] = []
+            right_ids: list[int] = []
+            for i in range(left, right + 1):
+                if i < 0 or i >= len(tokens):
+                    continue
+                tok_id = int(tokens[i].get("token_id", -1))
+                if tok_id < 0:
+                    continue
+                if i < fired_token_index:
+                    left_ids.append(tok_id)
+                elif i > fired_token_index:
+                    right_ids.append(tok_id)
+
+            left_text = tokenizer.decode(
+                left_ids, skip_special_tokens=False, clean_up_tokenization_spaces=False
+            )
+            fired_text = tokenizer.decode(
+                [fired_token_id], skip_special_tokens=False, clean_up_tokenization_spaces=False
+            )
+            right_text = tokenizer.decode(
+                right_ids, skip_special_tokens=False, clean_up_tokenization_spaces=False
+            )
+            core = (
+                f"{left_text}"
+                f"{_highlight_token_for_context(_normalize_token_for_context(fired_text))}"
+                f"{right_text}"
+            )
+            prefix = " ".join(["<PAD>"] * left_pad_count)
+            suffix = " ".join(["<PAD>"] * right_pad_count)
+            context = " ".join(part for part in (prefix, core, suffix) if part)
+        except Exception:
+            context = " ".join(window_parts)
+    else:
+        context = " ".join(window_parts)
+
+    context = re.sub(r"\s+([,.;:!?])", r"\1", context)
+    context = re.sub(r"\s+", " ", context).strip()
     return context, fired_token_str, fired_token_id
 
 
@@ -116,6 +380,8 @@ def scan_feature_occurrences(
     str | None,
     dict[int, int],
     dict[int, list[OccurrenceContext]],
+    int,
+    int,
 ]:
     """
     Returns:
@@ -130,11 +396,15 @@ def scan_feature_occurrences(
 
     feature_counts: dict[int, int] = defaultdict(int)
     sampled_occurrences: dict[int, list[OccurrenceContext]] = defaultdict(list)
+    sampled_usable_counts: dict[int, int] = defaultdict(int)
+    occurrences_filtered_out = 0
 
     rng = random.Random(seed)
 
     resolved_model: str | None = None
     resolved_sae_id: str | None = None
+    tokenizer: Any | None = None
+    tokenizer_model_name: str | None = None
 
     emitted_rows = 0
     columns = ["model", "sae_id", "tokens", "text"]
@@ -147,6 +417,13 @@ def scan_feature_occurrences(
             resolved_model = row.get("model")
         if resolved_sae_id is None:
             resolved_sae_id = row.get("sae_id")
+        if (
+            isinstance(resolved_model, str)
+            and tokenizer is None
+            and tokenizer_model_name != resolved_model
+        ):
+            tokenizer = _load_tokenizer(resolved_model)
+            tokenizer_model_name = resolved_model
 
         tokens = row.get("tokens") or []
         if not isinstance(tokens, list) or not tokens:
@@ -160,19 +437,25 @@ def scan_feature_occurrences(
                 continue
 
             context, fired_token_str, fired_token_id = build_context_window(
-                tokens, t_idx, radius=context_radius
+                tokens, t_idx, radius=context_radius, tokenizer=tokenizer
             )
             occ = OccurrenceContext(
                 context=context,
                 token=fired_token_str,
                 token_id=fired_token_id,
             )
+            keep_for_labeling = not _is_low_information_token(fired_token_str)
+            if not keep_for_labeling:
+                occurrences_filtered_out += 1
 
             # Update reservoir sampling for every fired feature at this token position.
             for feature_id in fired_features:
                 fid = int(feature_id)
                 feature_counts[fid] += 1
-                n = feature_counts[fid]
+                if not keep_for_labeling:
+                    continue
+                sampled_usable_counts[fid] += 1
+                n = sampled_usable_counts[fid]
 
                 if n <= top_k:
                     sampled_occurrences[fid].append(occ)
@@ -186,9 +469,21 @@ def scan_feature_occurrences(
     # Filter to features that meet min_occurrences.
     eligible = {fid for fid, c in feature_counts.items() if c >= min_occurrences}
     filtered_counts = {fid: c for fid, c in feature_counts.items() if fid in eligible}
-    filtered_samples = {fid: sampled_occurrences[fid] for fid in eligible}
+    filtered_samples = {
+        fid: sampled_occurrences[fid]
+        for fid in eligible
+        if sampled_occurrences.get(fid)
+    }
+    features_with_no_usable_contexts = len(eligible) - len(filtered_samples)
 
-    return resolved_model, resolved_sae_id, filtered_counts, filtered_samples
+    return (
+        resolved_model,
+        resolved_sae_id,
+        filtered_counts,
+        filtered_samples,
+        occurrences_filtered_out,
+        features_with_no_usable_contexts,
+    )
 
 
 def _parse_args() -> argparse.Namespace:
@@ -197,7 +492,7 @@ def _parse_args() -> argparse.Namespace:
     )
     p.add_argument(
         "--input-parquet-glob",
-        default="data/neuron_labels_mamay/*_batch_*.parquet",
+        default="data/neurons_labeling_propaganda/*_batch_*.parquet",
         help="Glob for input neuron-label Parquet batches.",
     )
     p.add_argument("--top-k", type=int, default=20, help="Sample up to K contexts per feature.")
@@ -210,7 +505,7 @@ def _parse_args() -> argparse.Namespace:
     p.add_argument(
         "--context-radius",
         type=int,
-        default=5,
+        default=20,
         help="Number of tokens on each side of the fired token in the context window.",
     )
     p.add_argument("--seed", type=int, default=0, help="Seed for deterministic reservoir sampling.")
@@ -222,7 +517,7 @@ def _parse_args() -> argparse.Namespace:
     )
     p.add_argument(
         "--output-jsonl",
-        default="data/neuron_labels_mamay/results/neuronpedia_feature_labels.jsonl",
+        default="data/neurons_labeling_propaganda/results/neuronpedia_feature_labels.jsonl",
         help="Output JSONL path (used only when LLM is enabled).",
     )
     p.add_argument(
@@ -251,6 +546,30 @@ def _parse_args() -> argparse.Namespace:
         default=None,
         help="Comma-separated provider slugs for OpenRouter provider.order (overrides OPENROUTER_PROVIDER_ORDER).",
     )
+    p.add_argument(
+        "--max-features-to-label",
+        type=int,
+        default=None,
+        help="Optional cap on number of ranked features to label.",
+    )
+    p.add_argument(
+        "--min-unique-tokens",
+        type=int,
+        default=3,
+        help="Minimum number of unique fired tokens in sampled contexts.",
+    )
+    p.add_argument(
+        "--min-diversity-ratio",
+        type=float,
+        default=0.4,
+        help="Minimum unique-token ratio among sampled contexts.",
+    )
+    p.add_argument(
+        "--min-token-entropy",
+        type=float,
+        default=0.9,
+        help="Minimum entropy over fired-token distribution in sampled contexts.",
+    )
     return p.parse_args()
 
 
@@ -264,7 +583,14 @@ def _optional_csv_providers(s: str | None) -> list[str] | None:
 def main() -> None:
     args = _parse_args()
 
-    model_name, sae_id, feature_counts, sampled = scan_feature_occurrences(
+    (
+        model_name,
+        sae_id,
+        feature_counts,
+        sampled,
+        occurrences_filtered_out,
+        features_with_no_usable_contexts,
+    ) = scan_feature_occurrences(
         parquet_glob=args.input_parquet_glob,
         top_k=args.top_k,
         seed=args.seed,
@@ -273,7 +599,18 @@ def main() -> None:
         max_rows=args.max_rows,
     )
 
-    n_features = len(feature_counts)
+    ordered_feature_ids = order_features_for_labeling(feature_counts, sampled)
+    ordered_feature_ids = apply_feature_quality_gate(
+        ordered_feature_ids,
+        sampled,
+        min_unique_tokens=max(1, int(args.min_unique_tokens)),
+        min_diversity_ratio=max(0.0, float(args.min_diversity_ratio)),
+        min_token_entropy=max(0.0, float(args.min_token_entropy)),
+    )
+    if args.max_features_to_label is not None and args.max_features_to_label > 0:
+        ordered_feature_ids = ordered_feature_ids[: args.max_features_to_label]
+
+    n_features = len(ordered_feature_ids)
     total_occ = sum(feature_counts.values())
     print(
         json.dumps(
@@ -284,6 +621,13 @@ def main() -> None:
                 "sum_occurrences_over_eligible": total_occ,
                 "top_k": args.top_k,
                 "min_occurrences": args.min_occurrences,
+                "occurrences_filtered_out": occurrences_filtered_out,
+                "features_with_no_usable_contexts": features_with_no_usable_contexts,
+                "features_ranked_for_labeling": n_features,
+                "max_features_to_label": args.max_features_to_label,
+                "min_unique_tokens": args.min_unique_tokens,
+                "min_diversity_ratio": args.min_diversity_ratio,
+                "min_token_entropy": args.min_token_entropy,
             },
             indent=2,
             ensure_ascii=False,
@@ -329,13 +673,26 @@ def main() -> None:
     )
 
     # Append one JSON object per feature.
+    used_label_keys: set[str] = set()
     with output_path.open("a", encoding="utf-8") as out_f:
-        for idx, feature_id in enumerate(sorted(feature_counts.keys())):
+        for idx, feature_id in enumerate(ordered_feature_ids):
             if feature_id in labeled_features:
                 continue
 
             contexts = [occ.context for occ in sampled[feature_id]]
             result = openrouter.label_feature(feature_id=feature_id, contexts=contexts)
+            label_key = _normalize_label_key(result.label)
+            needs_retry = is_generic_label(result.label) or (label_key in used_label_keys)
+            if needs_retry:
+                banned = list(used_label_keys) + [result.label]
+                result = openrouter.label_feature(
+                    feature_id=feature_id,
+                    contexts=contexts,
+                    avoid_labels=banned,
+                    force_specific=True,
+                )
+                label_key = _normalize_label_key(result.label)
+            used_label_keys.add(label_key)
 
             neuronpedia_feature_id: str | None = None
             if model_name and sae_id:
