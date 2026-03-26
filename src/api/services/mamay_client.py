@@ -1,5 +1,5 @@
 import httpx
-from typing import List
+from typing import List, Optional, Union, Any
 import torch
 from src.schemas.activations import ActivationPoint
 from src.core.settings import settings
@@ -48,7 +48,7 @@ class MamayClient:
     async def get_activations(
         self, 
         texts: List[str]
-    ) -> List[tuple[str, List[ActivationPoint]]]:
+    ) -> List[tuple[str, List[ActivationPoint], Optional[list[int]]]]:
         """
         Get activations from the MamayScope API.
         
@@ -56,8 +56,8 @@ class MamayClient:
             texts (List[str]): List of input texts to process
         
         Returns:
-            List[tuple[str, List[ActivationPoint]]]: List of tuples containing 
-                input text and corresponding activation points
+            List[tuple[str, List[ActivationPoint], Optional[list[int]]]]: Per input text, activation points,
+            and optional full-sequence token ids aligned to activations time dim.
         
         Raises:
             httpx.HTTPError: If the request fails
@@ -74,10 +74,8 @@ class MamayClient:
         
         data = response.json()
         
-        # Parse the response into ActivationPoint objects
-        activations = []
-        for text, acts_data in data["activations"]:
-            activation_points = []
+        def _parse_points(acts_data: Any) -> list[ActivationPoint]:
+            activation_points: list[ActivationPoint] = []
             for act in acts_data:
                 tensor_data = act["value"]
                 if isinstance(tensor_data, dict):
@@ -92,12 +90,34 @@ class MamayClient:
                 activation_points.append(
                     ActivationPoint(
                         name=act["name"],
-                        value=tensor
+                        value=tensor,
                     )
                 )
-            activations.append((text, activation_points))
-        
-        return activations
+            return activation_points
+
+        out: list[tuple[str, list[ActivationPoint], Optional[list[int]]]] = []
+        rows = data.get("activations", [])
+
+        # Backward compatibility:
+        # - Old server: {"activations": [[text, acts_data], ...]}
+        # - New server: {"activations": [{"text":..., "activation_points":..., "input_ids":...}, ...]}
+        for row in rows:
+            if isinstance(row, dict):
+                text = str(row.get("text", ""))
+                acts_data = row.get("activation_points", [])
+                input_ids = row.get("input_ids")
+                parsed_ids = [int(x) for x in input_ids] if isinstance(input_ids, list) else None
+                out.append((text, _parse_points(acts_data), parsed_ids))
+            elif isinstance(row, (list, tuple)) and len(row) >= 2:
+                text = str(row[0])
+                acts_data = row[1]
+                input_ids = row[2] if len(row) >= 3 else None
+                parsed_ids = [int(x) for x in input_ids] if isinstance(input_ids, list) else None
+                out.append((text, _parse_points(acts_data), parsed_ids))
+            else:
+                raise TypeError(f"Unexpected activations row type: {type(row)}")
+
+        return out
 
 
 if __name__ == "__main__":

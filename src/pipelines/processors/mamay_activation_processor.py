@@ -84,6 +84,7 @@ class MamayActivationProcessor(PipelineStep):
         source_texts: list[str] = []
         token_indices: list[int] = []
         labels_per_row: list = []
+        input_ids_per_row: list[list[int] | None] = []
         h = settings.HIDDEN_SIZE
         flatten = settings.PIPELINE_FLATTEN_TOKENS
 
@@ -98,7 +99,7 @@ class MamayActivationProcessor(PipelineStep):
                 return t.unsqueeze(0)
             return t
 
-        for row_idx, (text, activation_points) in enumerate(activations_data):
+        for row_idx, (text, activation_points, input_ids) in enumerate(activations_data):
             activation_dict = {ap.name: ap.value for ap in activation_points}
             row_label = labels_in[row_idx] if labels_in is not None else None
 
@@ -140,9 +141,12 @@ class MamayActivationProcessor(PipelineStep):
                     source_texts.append(text)
                     token_indices.append(t_idx)
                     labels_per_row.append(row_label)
+                    # Per-token flattening: store full sequence ids for each token row (or None).
+                    input_ids_per_row.append(list(input_ids) if input_ids is not None else None)
             else:
                 input_tensors.append(input_tensor)
                 output_tensors.append(output_tensor)
+                input_ids_per_row.append(list(input_ids) if input_ids is not None else None)
 
         self.logger.info(
             f"Extracted {len(input_tensors)} input/output tensor pairs for layer {self.target_layer}"
@@ -164,4 +168,5 @@ class MamayActivationProcessor(PipelineStep):
             if labels_in is not None:
                 out["labels"] = list(labels_in)
 
+        out["input_ids"] = input_ids_per_row
         return out

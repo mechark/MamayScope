@@ -125,7 +125,14 @@ class SaeFeatureEncodeProcessor(PipelineStep):
         if not model_name:
             return
         self.logger.info("Loading AutoTokenizer for model=%s", model_name)
-        self._tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+        try:
+            self._tokenizer = AutoTokenizer.from_pretrained(
+                model_name,
+                trust_remote_code=True,
+                use_default_system_prompt=False,
+            )
+        except TypeError:
+            self._tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
 
     @staticmethod
     def _flat_input_ids(raw: object) -> list[int]:
@@ -140,55 +147,149 @@ class SaeFeatureEncodeProcessor(PipelineStep):
             return [int(x) for x in raw]
         raise TypeError(f"Unexpected input_ids type: {type(raw)}")
 
+    @staticmethod
+    def _dedupe_id_lists(rows: list[list[int]]) -> list[list[int]]:
+        seen: set[tuple[int, ...]] = set()
+        out: list[list[int]] = []
+        for r in rows:
+            t = tuple(r)
+            if t not in seen:
+                seen.add(t)
+                out.append(r)
+        return out
+
     def _token_ids_for_text(self, text: str, seq_len: int) -> list[int]:
         self._ensure_tokenizer()
         if self._tokenizer is None:
             return [-1] * seq_len
 
         tok = self._tokenizer
-        candidates: list[list[int]] = []
+        chat_candidates: list[list[int]] = []
+        plain_candidates: list[list[int]] = []
+
+        # MamayLM-Gemma-2-9B-IT (vLLM): chat template + tokenizer(..., add_special_tokens=False).
+        # Mamay `/activations` often returns seq_len = prompt tokens + generated continuation; exact
+        # length match to prompt-only encoding is uncommon. See model card:
+        # https://huggingface.co/INSAIT-Institute/MamayLM-Gemma-2-9B-IT-v0.1
+        if getattr(tok, "chat_template", None):
+            messages = [{"role": "user", "content": text}]
+            for add_generation_prompt in (True, False):
+                try:
+                    formatted = tok.apply_chat_template(
+                        messages,
+                        tokenize=False,
+                        add_generation_prompt=add_generation_prompt,
+                    )
+                    enc = tok(
+                        formatted,
+                        add_special_tokens=False,
+                        return_attention_mask=False,
+                    )
+                    chat_candidates.append(self._flat_input_ids(enc["input_ids"]))
+                except Exception:
+                    pass
+                try:
+                    templated = tok.apply_chat_template(
+                        messages,
+                        tokenize=True,
+                        add_generation_prompt=add_generation_prompt,
+                    )
+                    chat_candidates.append(self._flat_input_ids(templated))
+                except Exception:
+                    pass
+
         for add_special in (False, True):
             enc = tok(text, add_special_tokens=add_special, return_attention_mask=False)
-            ids = self._flat_input_ids(enc["input_ids"])
-            candidates.append(ids)
+            plain_candidates.append(self._flat_input_ids(enc["input_ids"]))
 
-        for ids in candidates:
+        chat_candidates = self._dedupe_id_lists(chat_candidates)
+        plain_candidates = self._dedupe_id_lists(plain_candidates)
+        combined = chat_candidates + plain_candidates
+
+        for ids in combined:
             if len(ids) == seq_len:
                 return ids
 
-        ids = candidates[0]
-        alt = candidates[1] if len(candidates) > 1 else None
-
-        if alt is not None and len(alt) == seq_len and len(ids) != seq_len:
-            return alt
-
-        if len(ids) == seq_len + 1 and getattr(tok, "bos_token_id", None) is not None:
-            if ids[0] == tok.bos_token_id:
+        bos_id = getattr(tok, "bos_token_id", None)
+        for ids in combined:
+            if bos_id is not None and len(ids) == seq_len + 1 and ids[0] == bos_id:
                 return ids[1:]
 
-        if len(ids) > seq_len:
+        # Prefer longest chat prompt that fits in seq_len, then pad — covers prompt + generated tail.
+        chat_fit = [x for x in chat_candidates if len(x) <= seq_len]
+        if chat_fit:
+            best = max(chat_fit, key=len)
+            tail = seq_len - len(best)
+            if tail > 0:
+                self.logger.debug(
+                    "Prompt tokens=%s activation seq_len=%s (%s positions likely model-generated after prompt); text=%r",
+                    len(best),
+                    seq_len,
+                    tail,
+                    text[:80],
+                )
+            return best + [-1] * tail
+
+        plain_fit = [x for x in plain_candidates if len(x) <= seq_len]
+        if plain_fit:
+            best = max(plain_fit, key=len)
+            tail = seq_len - len(best)
+            if tail > 0:
+                self.logger.warning(
+                    "No chat prompt fit seq_len=%s; padding from plain encode (len=%s, +%s tail); text=%r",
+                    seq_len,
+                    len(best),
+                    tail,
+                    text[:80],
+                )
+            return best + [-1] * tail
+
+        # Shorter seq on server than our shortest chat prompt: prefix-truncate shortest chat sequence.
+        chat_over = [x for x in chat_candidates if len(x) >= seq_len]
+        if chat_over:
+            best = min(chat_over, key=len)
             self.logger.warning(
-                "Truncating token ids %s → %s (text=%r); verify NEURON_LABEL_MODEL_NAME matches Mamay",
+                "Truncating chat token ids %s → %s (server seq shorter than prompt template); text=%r",
+                len(best),
+                seq_len,
+                text[:80],
+            )
+            return best[:seq_len]
+
+        plain_over = [x for x in plain_candidates if len(x) >= seq_len]
+        if plain_over:
+            best = min(plain_over, key=len)
+            self.logger.warning(
+                "Truncating plain token ids %s → %s (text=%r); verify NEURON_LABEL_MODEL_NAME matches Mamay",
+                len(best),
+                seq_len,
+                text[:80],
+            )
+            return best[:seq_len]
+
+        return [-1] * seq_len
+
+    def _token_ids_for_row(self, text: str, seq_len: int, input_ids: list[int] | None) -> list[int]:
+        if input_ids is not None:
+            ids = [int(x) for x in input_ids]
+            if len(ids) == seq_len:
+                return ids
+            self.logger.warning(
+                "Server provided input_ids len=%s but activation seq_len=%s; falling back to local tokenization (text=%r)",
                 len(ids),
                 seq_len,
                 text[:80],
             )
-            return ids[:seq_len]
+        return self._token_ids_for_text(text, seq_len)
 
-        if len(ids) < seq_len:
-            self.logger.warning(
-                "Padding token ids %s → %s (text=%r); verify NEURON_LABEL_MODEL_NAME matches Mamay",
-                len(ids),
-                seq_len,
-                text[:80],
-            )
-            return ids + [-1] * (seq_len - len(ids))
-
-        return ids
-
-    def _tokens_field(self, text: str, fired_per_token: list[list[int]]) -> list[dict]:
+    def _tokens_field(
+        self,
+        text: str,
+        fired_per_token: list[list[int]],
+        input_ids: list[int] | None,
+    ) -> list[dict]:
         seq_len = len(fired_per_token)
-        ids = self._token_ids_for_text(text, seq_len)
+        ids = self._token_ids_for_row(text, seq_len, input_ids)
         tok = self._tokenizer
         out: list[dict] = []
         for pos in range(seq_len):
@@ -200,7 +301,7 @@ class SaeFeatureEncodeProcessor(PipelineStep):
                 if token_str.startswith("▁"):
                     token_str = token_str[1:]
             else:
-                token_str = f"<pos_{pos}>"
+                token_str = "<unk>"
             out.append(
                 {
                     "token_str": token_str,
@@ -248,6 +349,7 @@ class SaeFeatureEncodeProcessor(PipelineStep):
         output_tensors: list[torch.Tensor] = data.get("output_tensors", [])
         texts: list[str] = data.get("texts", [])
         labels = data.get("labels")
+        input_ids_rows: list[list[int] | None] = data.get("input_ids", [])
 
         if not output_tensors:
             self.logger.warning("SaeFeatureEncodeProcessor: no output tensors")
@@ -290,6 +392,7 @@ class SaeFeatureEncodeProcessor(PipelineStep):
         for i, acts in enumerate(output_tensors):
             text = texts[i] if i < len(texts) else ""
             label = labels_list[i]
+            row_input_ids = input_ids_rows[i] if i < len(input_ids_rows) else None
             per_token = self._encode_row(acts)
             rec = {
                 "text": text,
@@ -297,7 +400,7 @@ class SaeFeatureEncodeProcessor(PipelineStep):
                 "target_layer": self.target_layer,
                 "model": model_for_json,
                 "sae_id": sae_id,
-                "tokens": self._tokens_field(text, per_token),
+                "tokens": self._tokens_field(text, per_token, row_input_ids),
             }
             records.append(rec)
 

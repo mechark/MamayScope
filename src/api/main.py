@@ -94,8 +94,7 @@ async def get_activations(request: ActivationRequest):
         logger.info(f"Processing {len(request.texts)} texts (mock service generates all layers)")
         
         # Generate mock activations for all texts
-        # MockMamayService returns List[tuple[str, list[ActivationPoint]]]
-        # which matches the ActivationResponse schema
+        # Model service returns List[ActivationRow]
         activations = model_service.generate_activations(request.texts)
         
         return ActivationResponse(activations=activations)

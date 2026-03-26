@@ -1,6 +1,7 @@
 import torch
 from vllm_hook_plugins import HookedMamay
 from src.schemas.activations import ActivationPoint
+from src.api.schemas.schemas import ActivationRow
 from src.core.settings import settings
 
 from typing import List
@@ -22,7 +23,7 @@ class HookedMamayService:
             download_dir="/workspace/.hf_home"
         )
 
-    def generate_activations(self, texts: list[str]) -> List[tuple[str, list[ActivationPoint]]]:
+    def generate_activations(self, texts: list[str]) -> List[ActivationRow]:
         """
         Generate text and extract activations.
 
@@ -30,15 +31,20 @@ class HookedMamayService:
             texts (list[str]): List of input texts to process.
 
         Returns:
-            List[tuple[str, list[ActivationPoint]]]: List of tuples containing input text and corresponding activation points.
+            List[ActivationRow]: Per-text activations plus optional token ids used for the forward pass.
 
         Each layer ``value`` has shape ``[seq_len, hidden_size]``; last-token
         vector is ``value[-1, :]``. Longer prompts increase ``seq_len`` and memory.
         """
-        all_activations = []
+        rows: list[ActivationRow] = []
 
         for text in texts:
-            _, activations_dict = self.model.generate(text)
+            input_ids: list[int] | None = None
+            gen_with_ids = getattr(self.model, "generate_with_input_ids", None)
+            if callable(gen_with_ids):
+                _, activations_dict, input_ids = gen_with_ids(text)
+            else:
+                _, activations_dict = self.model.generate(text)
             activations = []
             
             for layer_idx, layer_acts in activations_dict.items():
@@ -48,10 +54,16 @@ class HookedMamayService:
                         value=layer_acts
                     )
                 )
-                
-            all_activations.append((text, activations))
 
-        return all_activations
+            rows.append(
+                ActivationRow(
+                    text=text,
+                    activation_points=activations,
+                    input_ids=[int(x) for x in input_ids] if input_ids is not None else None,
+                )
+            )
+
+        return rows
     
 if __name__ == "__main__":
     service = HookedMamayService()

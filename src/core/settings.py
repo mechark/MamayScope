@@ -23,7 +23,7 @@ class Settings(BaseSettings):
     RETRY_DELAY: float = 2.0
 
     # Neuron labeling pipeline (HF CSV + Mamay + SAELens encode → Parquet)
-    NEURON_LABEL_PARQUET_PATH: str = "data/neuron_labels/labels.parquet"
+    NEURON_LABEL_PARQUET_PATH: str = "data/neuron_labels_mamay/labels.parquet"
     NEURON_LABEL_JSONL_PATH: str = "data/neuron_labels/labels.jsonl"
     NEURON_LABEL_DATASET_LIMIT: int = 10_000
     NEURON_LABEL_HF_DATASET: str = "mechark/controversial_statements"
@@ -35,9 +35,31 @@ class Settings(BaseSettings):
     SAE_SNAPSHOT_CACHE_DIR: str = ".cache/mamayscope/sae_snapshot"
     SAE_DEVICE: Literal["auto", "mps", "cpu", "cuda"] = "auto"
     # HF model id for AutoTokenizer (default Gemma 2 9B — override to match Mamay if seq lengths disagree)
-    NEURON_LABEL_MODEL_NAME: str = "google/gemma-2-9b"
+    NEURON_LABEL_MODEL_NAME: str = "INSAIT-Institute/MamayLM-Gemma-2-9B-IT-v0.1"
     # JSON field sae_id; if empty, derived as layer_{TARGET}_{repo_stem}_{short_rev}
     NEURON_LABEL_SAE_ID: str = ""
+
+    # OpenRouter (used for neuron/feature labeling)
+    OPENROUTER_API_KEY: str = ""
+    # Default to a broadly routed model; openai/gpt-* often maps only to disallowed providers on restricted keys.
+    OPENROUTER_MODEL: str = "openai/gpt-4o-mini"
+    # Used when the first model+route returns "No allowed providers..." (auto-applied once per process).
+    OPENROUTER_FALLBACK_MODEL: str = "openai/gpt-4o-mini"
+    # Restrict routing when your API key only allows certain providers (see OpenRouter error
+    # "No allowed providers are available for the selected model").
+    # Comma-separated provider slugs, e.g. siliconflow,novita,alibaba
+    OPENROUTER_PROVIDER_ONLY: str = ""
+    OPENROUTER_PROVIDER_ORDER: str = ""
+    OPENROUTER_PROVIDER_ALLOW_FALLBACKS: bool = True
+    # Per-request OpenRouter routing: "allow" routes to more endpoints under strict account privacy.
+    # See https://openrouter.ai/docs/guides/privacy/data-collection — if you still get 404 guardrail errors,
+    # relax https://openrouter.ai/settings/privacy
+    OPENROUTER_PROVIDER_DATA_COLLECTION: Literal["allow", "deny"] = "allow"
+    # Base URL only (chat path is always /chat/completions). Docs: https://openrouter.ai/docs/api
+    OPENROUTER_BASE_URL: str = "https://openrouter.ai/api/v1"
+    # Recommended by OpenRouter for attribution/rate-limit behavior (optional but helps proxies).
+    OPENROUTER_HTTP_REFERER: str = "https://github.com/mechark/MamayScope"
+    OPENROUTER_APP_TITLE: str = "MamayScope"
 
     model_config = SettingsConfigDict(
         env_file=".env",

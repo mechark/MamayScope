@@ -1,5 +1,6 @@
 import torch
 from src.schemas.activations import ActivationPoint
+from src.api.schemas.schemas import ActivationRow
 from src.core.settings import settings
 from typing import List
 
@@ -28,7 +29,7 @@ class MockMamayService:
         self.hidden_size = hidden_size if hidden_size is not None else settings.HIDDEN_SIZE
         self.seq_len = seq_len if seq_len is not None else settings.MOCK_SEQ_LEN
         
-    def generate_activations(self, texts: list[str]) -> List[tuple[str, list[ActivationPoint]]]:
+    def generate_activations(self, texts: list[str]) -> List[ActivationRow]:
         """
         Generate mock activations with random tensors.
         
@@ -36,10 +37,9 @@ class MockMamayService:
             texts (list[str]): List of input texts to process.
             
         Returns:
-            List[tuple[str, list[ActivationPoint]]]: List of tuples containing input text 
-            and corresponding random activation points.
+            List[ActivationRow]: Per-text activation rows (no real token ids in mock mode).
         """
-        all_activations = []
+        rows: list[ActivationRow] = []
         
         for text in texts:
             activations = []
@@ -55,9 +55,15 @@ class MockMamayService:
                     )
                 )
             
-            all_activations.append((text, activations))
+            rows.append(
+                ActivationRow(
+                    text=text,
+                    activation_points=activations,
+                    input_ids=None,
+                )
+            )
         
-        return all_activations
+        return rows
 
 
 if __name__ == "__main__":
