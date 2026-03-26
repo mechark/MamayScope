@@ -34,7 +34,9 @@ async def lifespan(app: FastAPI):
             from src.services.mamay_service import HookedMamayService
 
             logger.info("Initializing HookedMamayService")
-            model_service = HookedMamayService()
+            model_service = HookedMamayService(
+                vllm_kwargs={"enable_prefix_caching": False}
+            )
         logger.info("Model service initialized successfully")
     except Exception as e:
         logger.error(f"Failed to initialize service: {e}")

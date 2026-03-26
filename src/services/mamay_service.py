@@ -11,7 +11,7 @@ class HookedMamayService:
     """
     Service for loading and providing access to the hooked MamayLLM running on vLLM-MamayHook.
     """
-    def __init__(self):
+    def __init__(self, vllm_kwargs: dict = {}):
         self.logger = logging.getLogger(__name__)
         layer_indices = settings.resolved_mamay_important_layers()
 
@@ -22,7 +22,8 @@ class HookedMamayService:
             trust_remote_code=True,
             dtype=torch.bfloat16,
             tensor_parallel_size=1, 
-            download_dir="/workspace/.hf_home"
+            download_dir="/workspace/.hf_home",
+            **vllm_kwargs
         )
 
     def generate_activations(self, texts: list[str]) -> List[ActivationRow]:
@@ -54,9 +55,9 @@ class HookedMamayService:
                         text[:80],
                         e,
                     )
-                    _, activations_dict = self.model.generate(text)
+                    _, activations_dict = self.model.generate(text, max_tokens=1)
             else:
-                _, activations_dict = self.model.generate(text)
+                _, activations_dict = self.model.generate(text, max_tokens=1)
             activations = []
             
             for layer_idx, layer_acts in activations_dict.items():
