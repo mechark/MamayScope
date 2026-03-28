@@ -18,3 +18,4 @@ temp/
 data/
 artifacts/
 .cache/
+.DS_Store
