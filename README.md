@@ -1,10 +1,10 @@
 # MamayScope
 
-**Перший інструмент механістичної інтерпретованості для українських великих мовних моделей. (проект у розробці...)**
+**Перший інструмент механістичної інтерпретованості для українських великих мовних моделей (проект у розробці...)**
 
 MamayScope — це дослідницька платформа для аналізу латентних просторів моделі [MamayLM](https://huggingface.co/INSAIT-Institute/MamayLM-Qwen2.5-7B-v0.2) за допомогою розріджених автоенкодерів (Sparse Autoencoders). Система дозволяє витягувати активації residual потоку, тренувати SAE, знаходити інтерпретовані фічі та автоматично розмічати їх через LLM (OpenRouter).
 
-![Архітектура системи MamayScope](docs/images/architecture_mamayscope.png)
+Архітектура системи MamayScope
 
 ---
 
@@ -59,7 +59,7 @@ CachedActivationsConfig → SAELensTrainer → ModelFileSink → HuggingFaceHubS
 
 ### Розмітка нейронів
 
-![Пайплайн розмітки нейронів](docs/images/pipeline_neuron_labeling.png)
+Пайплайн розмітки нейронів
 
 ```
 ParquetConversationSource → MamayActivationProcessor → SaeFeatureEncodeProcessor → FeatureOccurrenceIndex → OpenRouterLabeling
@@ -71,6 +71,7 @@ ParquetConversationSource → MamayActivationProcessor → SaeFeatureEncodeProce
 - Автоматична анотація через LLM (OpenRouter API)
 
 ### Формування корпусу
+
 Наразі корпус акцинтований на політичну тематику, проте має бути розширений до всіх тем.
 
 ```
@@ -87,21 +88,23 @@ LAPA HuggingFace → ParquetTextBatchSource → UkrainianPoliticalKeywordFilter 
 
 ### Натренована SAE-модель
 
-| Метрика | Значення |
-|---------|----------|
-| Explained Variance | 0.71 |
-| Середня розрідженість L0 | ~175 |
-| MSE Loss | 6500 → 1500 |
-| Навчальний корпус | 500K токенів |
-| Розмір словника | 16 384 фічі |
 
-Модель опублікована: [`mechark/MamaySAE`](https://huggingface.co/mechark/MamaySAE)
+| Метрика                  | Значення     |
+| ------------------------ | ------------ |
+| Explained Variance       | 0.71         |
+| Середня розрідженість L0 | ~175         |
+| MSE Loss                 | 6500 → 1500  |
+| Навчальний корпус        | 500K токенів |
+| Розмір словника          | 16 384 фічі  |
+
+
+Модель опублікована: `[mechark/MamaySAE](https://huggingface.co/mechark/MamaySAE)`
 
 ### Виявлені фічі
 
 Аналіз 205 розмічених фіч виявив семантично значущі концепції:
 
-![Розподіл фіч за категоріями](docs/images/feature_categories.png)
+Розподіл фіч за категоріями
 
 **Приклади:**
 
@@ -112,7 +115,7 @@ LAPA HuggingFace → ParquetTextBatchSource → UkrainianPoliticalKeywordFilter 
 
 ### Feature Browser
 
-![Інтерфейс перегляду фіч](docs/images/labeled-neurons-interface.png)
+Інтерфейс перегляду фіч
 
 ---
 
@@ -154,14 +157,16 @@ uv run -m src.scripts.build_feature_label_browser
 
 Основні змінні середовища:
 
-| Змінна | Опис | Default |
-|--------|------|---------|
-| `MODEL_ENDPOINT` | URL до Mamay API | `http://localhost:8000` |
-| `TARGET_LAYER` | Шар для збору активацій | `33` |
-| `SAE_HF_REPO_ID` | SAE-модель на HF Hub | `mechark/MamaySAE` |
-| `SAE_HF_REVISION` | Ревізія для відтворюваності | — |
-| `BATCH_SIZE` | Розмір батчу | — |
-| `PARALLEL_REQUESTS` | Паралельні запити до API | — |
+
+| Змінна              | Опис                        | Default                 |
+| ------------------- | --------------------------- | ----------------------- |
+| `MODEL_ENDPOINT`    | URL до Mamay API            | `http://localhost:8000` |
+| `TARGET_LAYER`      | Шар для збору активацій     | `33`                    |
+| `SAE_HF_REPO_ID`    | SAE-модель на HF Hub        | `mechark/MamaySAE`      |
+| `SAE_HF_REVISION`   | Ревізія для відтворюваності | —                       |
+| `BATCH_SIZE`        | Розмір батчу                | —                       |
+| `PARALLEL_REQUESTS` | Паралельні запити до API    | —                       |
+
 
 ---
 
