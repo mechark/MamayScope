@@ -8,7 +8,7 @@ device: cuda
 seed: 42
 shuffle_dataset: true
 
-# Training budget (tune to your 500k tokens dataset)
+# Training budget (tune to 500k tokens dataset)
 training_tokens: 500000
 train_batch_size_tokens: 4096
 mixing_buffer_size_tokens: 200000
@@ -27,23 +27,21 @@ n_checkpoints: 0
 save_final_checkpoint: false
 
 # Output
-output_dir: artifacts/sae_lens_runs/full_blocks33_resid_post
+output_dir: artifacts/sae_lens_runs/full_blocks33_resid_post-l1_10
 inference_model_subdir: sae_inference
 
-# Hub upload (model) - keep off unless you explicitly want it
+# Hub upload
 push_to_hub: true
 hf_repo_id: mechark/MamaySAE
 hf_commit_message: Upload trained SAE with l1_coefficient=10.0
 
-# W&B logging (enabled for full runs)
+# W&B logging
 log_to_wandb: true
 wandb_project: mamayscope-sae
-# wandb_entity: your-team-or-username
 wandb_run_name: full_blocks33_resid_post-l1_10
 wandb_log_frequency: 10
 
 sae:
-  # Standard L1 SAE. Start small-ish; increase later if you want.
   d_sae: 16384
   l1_coefficient: 10.0
   normalize_activations: expected_average_only_in
